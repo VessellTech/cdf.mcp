@@ -1,5 +1,4 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
 import type { ToolDef } from "./types.js";
 import { toolCatalog } from "./catalog/index.js";
 import * as backend from "../backend/client.js";
