@@ -1,0 +1,848 @@
+{
+  "$schema": "https://developers.openai.com/apps-sdk/schemas/chatgpt-app-submission.v1.json",
+  "schema_version": 1,
+  "app_info": {
+    "display_name": "CDF Finance MCP",
+    "subtitle": "Manage personal finance",
+    "description": "CDF Finance MCP connects ChatGPT to a user's private Vessell CDF account so they can review accounts, cards, transactions, invoices, budgets, goals, debts, investments, tags, and financial insights, and explicitly create or update personal finance records through the Vessell backend.",
+    "category": "FINANCE"
+  },
+  "tools": {
+    "get_profile": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes get profile data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "update_profile": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Updates update profile records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "list_accounts": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes list accounts data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "create_account": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or confirms create account records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "update_account": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Updates update account records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "delete_account": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Deletes delete account records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Deletes delete account records or generated private finance data when requested by the authenticated user."
+      }
+    },
+    "list_cards": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes list cards data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "create_card": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or confirms create card records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "update_card": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Updates update card records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "delete_card": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Deletes delete card records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Deletes delete card records or generated private finance data when requested by the authenticated user."
+      }
+    },
+    "list_categories": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes list categories data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "create_category": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or confirms create category records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "update_category": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Updates update category records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "delete_category": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Deletes delete category records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Deletes delete category records or generated private finance data when requested by the authenticated user."
+      }
+    },
+    "list_cost_centers": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes list cost centers data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "create_cost_center": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or confirms create cost center records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "update_cost_center": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Updates update cost center records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "delete_cost_center": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Deletes delete cost center records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Deletes delete cost center records or generated private finance data when requested by the authenticated user."
+      }
+    },
+    "list_transactions": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes list transactions data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "upcoming_transactions": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes upcoming transactions data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "create_transaction": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or confirms create transaction records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "confirm_new_transaction": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or confirms confirm new transaction records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "confirm_pending_transaction": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or confirms confirm pending transaction records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "update_transaction": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Updates update transaction records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "delete_transaction": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Deletes delete transaction records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Deletes delete transaction records or generated private finance data when requested by the authenticated user."
+      }
+    },
+    "list_recurring_transactions": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes list recurring transactions data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "create_recurring_transaction": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or confirms create recurring transaction records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "update_recurring_transaction": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Updates update recurring transaction records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "delete_recurring_transaction": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Deletes delete recurring transaction records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Deletes delete recurring transaction records or generated private finance data when requested by the authenticated user."
+      }
+    },
+    "list_invoices": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes list invoices data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "list_pending_invoices": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes list pending invoices data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "get_invoice": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes get invoice data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "current_invoice": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes current invoice data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "pay_invoice": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Marks pay invoice records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "list_goals": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes list goals data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "create_goal": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or confirms create goal records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "update_goal": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Updates update goal records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "delete_goal": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Deletes delete goal records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Deletes delete goal records or generated private finance data when requested by the authenticated user."
+      }
+    },
+    "list_budgets": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes list budgets data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "create_budget": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or confirms create budget records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "update_budget": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Updates update budget records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "delete_budget": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Deletes delete budget records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Deletes delete budget records or generated private finance data when requested by the authenticated user."
+      }
+    },
+    "budget_comparison": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes budget comparison data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "list_debts": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes list debts data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "create_debt": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or confirms create debt records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "update_debt": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Updates update debt records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "delete_debt": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Deletes delete debt records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Deletes delete debt records or generated private finance data when requested by the authenticated user."
+      }
+    },
+    "list_equities": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes list equities data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "create_equity": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or confirms create equity records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "update_equity": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Updates update equity records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "delete_equity": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Deletes delete equity records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Deletes delete equity records or generated private finance data when requested by the authenticated user."
+      }
+    },
+    "list_equity_valuations": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes list equity valuations data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "add_equity_valuation": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or confirms add equity valuation records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "investments_workspace": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes investments workspace data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "cashflow_forecast": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes cashflow forecast data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "spending_projection": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes spending projection data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "networth_projection": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes networth projection data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "current_month_spending": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes current month spending data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "categories_insights": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes categories insights data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "insights_highlight": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes insights highlight data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "behavior_insights": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes behavior insights data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "list_tags": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes list tags data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "tags_insights": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes tags insights data for the authenticated user without modifying records.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    },
+    "create_tag": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or confirms create tag records in the authenticated user's private Vessell finance workspace.",
+        "open_world_justification": "Only operates on the authenticated user's private Vessell finance workspace and does not publish or send external content.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible external actions."
+      }
+    }
+  },
+  "test_cases": [
+    {
+      "description": "Review monthly cash flow and spending from connected finance data.",
+      "user_prompt": "How much money is left from my salary this month, and which categories are driving my spending?",
+      "file_attachment_urls": null,
+      "tools_triggered": "list_accounts, current_month_spending, categories_insights",
+      "expected_output": "Returns account balances and month-to-date category spending so the user can understand remaining cash and major spend areas.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Check whether the next credit card invoice fits the monthly budget.",
+      "user_prompt": "Will my next credit card bill fit in this month's budget?",
+      "file_attachment_urls": null,
+      "tools_triggered": "list_cards, list_pending_invoices, list_budgets, budget_comparison",
+      "expected_output": "Summarizes pending invoice amounts against the user's budgets and highlights any likely shortfall.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Create a new explicit expense transaction.",
+      "user_prompt": "Log an Uber expense for BRL 27.50 on my Nubank account today and categorize it as Transportation.",
+      "file_attachment_urls": null,
+      "tools_triggered": "list_accounts, list_categories, create_transaction",
+      "expected_output": "Creates the requested private expense record only after identifying the relevant account and category from the user's Vessell data.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Confirm an existing pending transaction as paid.",
+      "user_prompt": "Show my pending transactions for this week and mark the grocery one as paid.",
+      "file_attachment_urls": null,
+      "tools_triggered": "upcoming_transactions, confirm_pending_transaction",
+      "expected_output": "Lists upcoming or pending transactions, selects the matching grocery item, and confirms it as paid in the user's private finance workspace.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Update investment valuation and review portfolio overview.",
+      "user_prompt": "Add today's valuation for my Treasury investment as BRL 15000 and show my investment workspace.",
+      "file_attachment_urls": null,
+      "tools_triggered": "list_equities, add_equity_valuation, investments_workspace",
+      "expected_output": "Records the new valuation for the selected investment and returns the updated private investment overview.",
+      "expected_output_url": null
+    }
+  ],
+  "negative_test_cases": [
+    {
+      "description": "Do not trigger for bank transfers or payments outside personal finance logging.",
+      "user_prompt": "Send BRL 500 from my checking account to Maria now.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not be invoked to move money or execute an external financial transaction because it only records and analyzes Vessell finance data.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Do not trigger for tax or regulated financial advice outside the app's scope.",
+      "user_prompt": "Tell me exactly which stocks I should buy today for guaranteed returns.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not be invoked because the request asks for investment advice rather than managing the user's Vessell records.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Do not trigger for unrelated calendar or messaging requests.",
+      "user_prompt": "Schedule a meeting with my accountant tomorrow and email them my report.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not be invoked because it cannot schedule calendar events or send email.",
+      "expected_output_url": null
+    }
+  ]
+}

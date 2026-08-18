@@ -9,6 +9,8 @@ const EnvSchema = z.object({
   TOKEN_ENCRYPTION_KEY: z.string().min(1, "gere com node -e \"console.log(require('crypto').randomBytes(32).toString('base64'))\""),
   SESSION_SECRET: z.string().min(16),
   ALLOWED_ORIGINS: z.string().default(""),
+  /** "full" expõe o catálogo completo; "readonly" só tools de consulta (readOnly: true). */
+  MCP_TOOLS_MODE: z.enum(["full", "readonly"]).default("full"),
 });
 
 const parsed = EnvSchema.safeParse(process.env);

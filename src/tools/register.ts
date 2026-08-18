@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { ToolDef } from "./types.js";
 import { toolCatalog } from "./catalog/index.js";
+import { env } from "../config.js";
 import * as backend from "../backend/client.js";
 import { getValidAccessToken } from "../backend/session.js";
 
@@ -48,7 +49,12 @@ function pathParamNames(def: ToolDef): Set<string> {
 
 /** Registra todos os tools do catálogo num McpServer, resolvendo o backend-husk via a sessão MCP autenticada. */
 export function registerTools(server: McpServer, sessionId: string) {
-  for (const def of toolCatalog) {
+  // Em MCP_TOOLS_MODE=readonly (ex: listagem em diretórios curados), expõe só
+  // consultas — oculta criação/edição/exclusão do catálogo.
+  const catalog =
+    env.MCP_TOOLS_MODE === "readonly" ? toolCatalog.filter((t) => t.readOnly) : toolCatalog;
+
+  for (const def of catalog) {
     const pathParams = pathParamNames(def);
 
     server.registerTool(

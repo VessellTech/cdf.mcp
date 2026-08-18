@@ -85,6 +85,20 @@ escrita — cobrindo a funcionalidade principal:
 - **Suporte e contato**: `support@cdf.finance` — site: <https://cdf.finance>.
 - **Status do serviço**: <https://status.cdf.finance> (BetterStack).
 
+## Escopo e conformidade (4.A da Política de Diretório da Anthropic)
+
+O conector **não transfere dinheiro, criptomoedas ou outros ativos financeiros**
+e **não executa transações financeiras em nome do usuário**: ele apenas lê e
+registra lançamentos num app de controle financeiro pessoal — o mesmo que o
+app faz — e toda ação de escrita é explícita e solicitada pelo usuário na
+conversa.
+
+- **Modo somente leitura**: defina `MCP_TOOLS_MODE=readonly` no deploy para
+  expor apenas tools de consulta (`readOnly: true`), ocultando criação,
+  edição e exclusão do catálogo. O padrão é `full`.
+- **Pedido de exceção por escrito** (previsto na própria seção 4.A): ver
+  `docs/4a-exception-request.md`.
+
 ## Rodando localmente
 
 ```bash

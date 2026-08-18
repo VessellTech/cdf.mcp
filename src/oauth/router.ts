@@ -223,6 +223,9 @@ function renderLoginPage(p: {
     background:#fef2f2;color:#dc2626;font-size:13px;line-height:1.4;
   }
   .footnote{margin-top:20px;text-align:center;font-size:12px;color:var(--muted-foreground)}
+  .legal{margin-top:10px;text-align:center;font-size:11.5px;line-height:1.6;color:var(--muted-foreground)}
+  .legal a{color:var(--sky-deep);text-decoration:none;font-weight:500}
+  .legal a:hover{text-decoration:underline}
 </style></head>
 <body>
 <div class="card">
@@ -246,6 +249,7 @@ function renderLoginPage(p: {
     ${p.error ? `<div class="err">${esc(p.error)}</div>` : ""}
   </form>
   <p class="footnote">Sua senha nunca é compartilhada com ${esc(p.clientName ?? "o cliente MCP")}.</p>
+  <p class="legal">Ao entrar e autorizar, você concorda com os <a href="https://cdf.finance/legal?tab=terms" target="_blank" rel="noopener">Termos de Uso</a> e a <a href="https://cdf.finance/mcp-privacy" target="_blank" rel="noopener">Política de Privacidade do conector MCP</a> do CDF Finance.</p>
 </div>
 </body></html>`;
 }
