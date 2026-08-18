@@ -26,12 +26,19 @@ app.get("/healthz", (_req, res) => res.json({ ok: true }));
 
 app.use(oauthRouter);
 
-app.all("/mcp", requireBearerAuth, (req, res) => {
+function mcpEndpoint(req: express.Request, res: express.Response) {
   handleMcpRequest(req, res).catch((err) => {
-    console.error("erro no /mcp:", err);
+    console.error(`erro no ${req.path}:`, err);
     if (!res.headersSent) res.status(500).json({ error: "internal_error" });
   });
-});
+}
+
+// Alguns clients MCP (Claude entre eles) tratam a URL do conector como o
+// próprio endpoint de transporte e ignoram o "resource" descoberto via
+// .well-known — então respondem tanto na raiz quanto em /mcp evita depender
+// de o usuário digitar o sufixo certo.
+app.all("/mcp", requireBearerAuth, mcpEndpoint);
+app.all("/", requireBearerAuth, mcpEndpoint);
 
 app.listen(env.PORT, () => {
   console.log(`cdf-mcp-server ouvindo em :${env.PORT} (público: ${env.PUBLIC_URL})`);
