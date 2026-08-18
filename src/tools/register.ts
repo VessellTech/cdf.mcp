@@ -63,6 +63,7 @@ export function registerTools(server: McpServer, sessionId: string) {
         title: def.title,
         description: def.description,
         inputSchema: def.input,
+        outputSchema: def.outputSchema,
         annotations: {
           readOnlyHint: def.readOnly ?? false,
           destructiveHint: def.destructive ?? false,
@@ -89,7 +90,16 @@ export function registerTools(server: McpServer, sessionId: string) {
           });
 
           const sanitized = redactLargeInlineData(result);
-          return { content: [{ type: "text" as const, text: JSON.stringify(sanitized, null, 2) }] };
+          // O SDK valida structuredContent contra o outputSchema (objeto).
+          // Arrays no topo vêm embrulhados em { data } — texto e structured
+          // ficam consistentes.
+          const structured = Array.isArray(sanitized)
+            ? { data: sanitized }
+            : (sanitized as Record<string, unknown>);
+          return {
+            content: [{ type: "text" as const, text: JSON.stringify(structured, null, 2) }],
+            structuredContent: structured,
+          };
         } catch (err) {
           const message =
             err instanceof backend.BackendApiError

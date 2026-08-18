@@ -1,4 +1,4 @@
-import type { ZodRawShape } from "zod";
+import { z, type ZodRawShape } from "zod";
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -15,6 +15,14 @@ export interface ToolDef {
    * rota; as demais viram query string (GET/DELETE) ou corpo JSON (POST/PUT).
    */
   input: ZodRawShape;
+  /**
+   * Schema de saída declarado (MCP outputSchema) — o modelo entende o formato
+   * do resultado antes de chamar a tool. O SDK valida o retorno contra este
+   * schema (todos os campos devem ser optional/nullable para nunca quebrar a
+   * chamada) e exige objeto no topo: arrays devem vir embrulhados em
+   * `{ data: [...] }`.
+   */
+  outputSchema?: z.ZodTypeAny;
   /** Anotações de comportamento (MCP tool annotations). */
   readOnly?: boolean;
   destructive?: boolean;

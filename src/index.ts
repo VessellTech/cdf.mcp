@@ -24,6 +24,15 @@ app.use(express.json({ limit: "1mb" }));
 
 app.get("/healthz", (_req, res) => res.json({ ok: true }));
 
+app.get("/.well-known/openai-apps-challenge", (_req, res) => {
+  const token = env.OPENAI_APPS_CHALLENGE_TOKEN;
+  if (!token) {
+    res.status(503).type("text/plain; charset=utf-8").send("OPENAI_APPS_CHALLENGE_TOKEN not configured");
+    return;
+  }
+  res.type("text/plain; charset=utf-8").send(token);
+});
+
 app.use(oauthRouter);
 
 function mcpEndpoint(req: express.Request, res: express.Response) {
