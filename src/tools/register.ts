@@ -6,6 +6,34 @@ import { getValidAccessToken } from "../backend/session.js";
 
 const pathParamRegex = /:([A-Za-z0-9_]+)/g;
 
+const DATA_URI_RE = /^data:[a-zA-Z0-9.+-]+\/[a-zA-Z0-9.+-]+;base64,/;
+const MAX_STRING_LEN = 4000;
+
+/**
+ * Alguns campos do backend-husk guardam imagem inline como data URL base64
+ * (ex: User.picture) em vez de uma URL — ótimo pro app mobile, péssimo pra um
+ * cliente MCP: já vimos um payload de 1.4MB estourar o contexto do Claude.
+ * Troca qualquer data URI (e qualquer string absurdamente longa, de forma
+ * genérica) por um placeholder antes de devolver ao cliente.
+ */
+function redactLargeInlineData(value: unknown): unknown {
+  if (typeof value === "string") {
+    if (DATA_URI_RE.test(value)) {
+      const kb = Math.round((value.length * 0.75) / 1024);
+      return `[imagem omitida — ~${kb} KB, use o app pra visualizar]`;
+    }
+    if (value.length > MAX_STRING_LEN) {
+      return `${value.slice(0, 200)}… [truncado — ${value.length} caracteres no total]`;
+    }
+    return value;
+  }
+  if (Array.isArray(value)) return value.map(redactLargeInlineData);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, redactLargeInlineData(v)]));
+  }
+  return value;
+}
+
 function buildPath(def: ToolDef, values: Record<string, unknown>): string {
   return def.path.replace(pathParamRegex, (_match, key: string) => {
     const v = values[key];
@@ -54,7 +82,8 @@ export function registerTools(server: McpServer, sessionId: string) {
             body: isBodyMethod ? rest : undefined,
           });
 
-          return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+          const sanitized = redactLargeInlineData(result);
+          return { content: [{ type: "text" as const, text: JSON.stringify(sanitized, null, 2) }] };
         } catch (err) {
           const message =
             err instanceof backend.BackendApiError

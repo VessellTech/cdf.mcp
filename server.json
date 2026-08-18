@@ -1,0 +1,17 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.VessellTech/cdf.mcp",
+  "title": "CDF Finance MCP",
+  "description": "Consulte contas, cartões, transações e orçamentos da sua conta financeira Vessell.",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/VessellTech/cdf.mcp",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.cdf.finance/mcp"
+    }
+  ]
+}
