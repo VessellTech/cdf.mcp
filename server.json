@@ -3,11 +3,30 @@
   "name": "io.github.VessellTech/cdf.mcp",
   "title": "CDF Finance MCP",
   "description": "Consulte contas, cartões, transações e orçamentos da sua conta financeira Vessell.",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "websiteUrl": "https://cdf.finance/mcp",
   "repository": {
     "url": "https://github.com/VessellTech/cdf.mcp",
     "source": "github"
   },
+  "icons": [
+    {
+      "src": "https://cdf.finance/logo-blue.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "256x256"
+      ],
+      "theme": "light"
+    },
+    {
+      "src": "https://cdf.finance/logo-white.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "256x256"
+      ],
+      "theme": "dark"
+    }
+  ],
   "remotes": [
     {
       "type": "streamable-http",

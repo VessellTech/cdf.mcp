@@ -67,6 +67,24 @@ pagamentos/Stripe, webhooks, anexos (S3, binário), rotas de IA (`/api/ai/*`
 — o próprio MCP já cobre esse caso de uso, não faz sentido expor "chame a IA
 interna" como tool de uma IA externa).
 
+## Exemplos de prompts
+
+Três exemplos funcionais do que dá para pedir — dois de consulta e um de
+escrita — cobrindo a funcionalidade principal:
+
+| # | Português | English |
+|---|-----------|---------|
+| 1 | "Quanto sobrou do meu salário esse mês?" | "How much is left of my salary this month?" |
+| 2 | "Minha próxima fatura de cartão vai caber no orçamento deste mês?" | "Will my next credit card bill fit in this month's budget?" |
+| 3 | "Lança um Uber de R$ 27,50 na minha conta Nubank e categoriza como Transporte." | "Log an Uber ride of R$ 27.50 on my Nubank account and categorize it as Transportation." |
+
+## Revisão para diretórios (Anthropic)
+
+- **Conta de teste** (com dados de amostra, para revisores verificarem a
+  funcionalidade completa): `joao@teste.com` / `123456`.
+- **Suporte e contato**: `support@cdf.finance` — site: <https://cdf.finance>.
+- **Status do serviço**: <https://status.cdf.finance> (BetterStack).
+
 ## Rodando localmente
 
 ```bash
