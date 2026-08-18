@@ -1,6 +1,40 @@
 import { z } from "zod";
 import type { ToolDef } from "../types.js";
 
+// --- Shapes de saída (espelham as queries de categories.husk / costcenters.husk + schema Prisma) ---
+
+const countShape = z.object({
+  count: z.number().optional(),
+});
+
+const successShape = z.object({
+  success: z.boolean().optional(),
+});
+
+const categoryShape = z.object({
+  id: z.string().optional(),
+  userId: z.string().optional(),
+  name: z.string().optional(),
+  type: z.enum(["EXPENSE", "INCOME"]).optional(),
+  color: z.string().optional().nullable(),
+  icon: z.string().optional().nullable(),
+  parentId: z.string().optional().nullable(),
+  globalCategoryId: z.string().optional().nullable(),
+  globalSubcategoryId: z.string().optional().nullable(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
+});
+
+const costCenterShape = z.object({
+  id: z.string().optional(),
+  userId: z.string().optional(),
+  name: z.string().optional(),
+  description: z.string().optional().nullable(),
+  isDefault: z.boolean().optional(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
+});
+
 export const categoryTools: ToolDef[] = [
   {
     name: "list_categories",
@@ -10,6 +44,7 @@ export const categoryTools: ToolDef[] = [
     path: "/api/categories",
     input: {},
     readOnly: true,
+    outputSchema: z.object({ data: z.array(categoryShape) }),
   },
   {
     name: "create_category",
@@ -26,6 +61,7 @@ export const categoryTools: ToolDef[] = [
       globalCategoryId: z.string().optional(),
       globalSubcategoryId: z.string().optional(),
     },
+    outputSchema: categoryShape,
   },
   {
     name: "update_category",
@@ -41,6 +77,7 @@ export const categoryTools: ToolDef[] = [
       color: z.string().optional(),
       parentId: z.string().optional(),
     },
+    outputSchema: countShape,
   },
   {
     name: "delete_category",
@@ -50,6 +87,7 @@ export const categoryTools: ToolDef[] = [
     path: "/api/categories/:id",
     input: { id: z.string() },
     destructive: true,
+    outputSchema: countShape,
   },
   {
     name: "list_cost_centers",
@@ -59,6 +97,7 @@ export const categoryTools: ToolDef[] = [
     path: "/api/cost-centers",
     input: {},
     readOnly: true,
+    outputSchema: z.object({ data: z.array(costCenterShape) }),
   },
   {
     name: "create_cost_center",
@@ -67,6 +106,7 @@ export const categoryTools: ToolDef[] = [
     method: "POST",
     path: "/api/cost-centers",
     input: { name: z.string(), icon: z.string().optional(), color: z.string().optional() },
+    outputSchema: costCenterShape,
   },
   {
     name: "update_cost_center",
@@ -75,6 +115,7 @@ export const categoryTools: ToolDef[] = [
     method: "PUT",
     path: "/api/cost-centers/:id",
     input: { id: z.string(), name: z.string().optional(), icon: z.string().optional(), color: z.string().optional() },
+    outputSchema: costCenterShape,
   },
   {
     name: "delete_cost_center",
@@ -84,5 +125,6 @@ export const categoryTools: ToolDef[] = [
     path: "/api/cost-centers/:id",
     input: { id: z.string() },
     destructive: true,
+    outputSchema: successShape,
   },
 ];

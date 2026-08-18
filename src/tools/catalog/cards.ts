@@ -1,6 +1,25 @@
 import { z } from "zod";
 import type { ToolDef } from "../types.js";
 
+// Campos devolvidos por list_cards e create_card (RETURNING).
+const cardShape = {
+  id: z.string().optional(),
+  userId: z.string().optional(),
+  accountId: z.string().optional().nullable(),
+  name: z.string().optional(),
+  limit: z.number().optional().nullable().describe("Limite do cartão; null = Sem Limite"),
+  closingDay: z.number().optional(),
+  dueDay: z.number().optional(),
+  color: z.string().optional(),
+  currency: z.string().optional(),
+  limitUsed: z.number().optional(),
+  currentInvoice: z.number().optional().describe("Total da fatura atual (não paga)"),
+  lastFourDigits: z.string().optional().nullable(),
+  brand: z.string().optional().nullable(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
+};
+
 export const cardTools: ToolDef[] = [
   {
     name: "list_cards",
@@ -10,6 +29,7 @@ export const cardTools: ToolDef[] = [
     path: "/api/cards",
     input: {},
     readOnly: true,
+    outputSchema: z.object({ data: z.array(z.object(cardShape)) }),
   },
   {
     name: "create_card",
@@ -26,6 +46,7 @@ export const cardTools: ToolDef[] = [
       lastFourDigits: z.string().optional(),
       brand: z.string().optional().describe("Ex: VISA, MASTERCARD"),
     },
+    outputSchema: z.object(cardShape),
   },
   {
     name: "update_card",
@@ -43,6 +64,9 @@ export const cardTools: ToolDef[] = [
       lastFourDigits: z.string().optional(),
       brand: z.string().optional(),
     },
+    // O SQL de update_card (cards.husk) termina em "SELECT count(*) AS count",
+    // então a resposta é { count }, não o cartão atualizado.
+    outputSchema: z.object({ count: z.number().optional() }),
   },
   {
     name: "delete_card",
@@ -52,5 +76,6 @@ export const cardTools: ToolDef[] = [
     path: "/api/cards/:id",
     input: { id: z.string() },
     destructive: true,
+    outputSchema: z.object({ count: z.number().optional() }),
   },
 ];
