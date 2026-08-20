@@ -299,6 +299,28 @@ export const insightTools: ToolDef[] = [
     readOnly: true,
   },
   {
+    name: "financial_snapshot",
+    title: "Resumo financeiro correlacionado",
+    description:
+      "Saldo total, receita/despesa média mensal, taxa de poupança, reserva de emergência (meses), endividamento sobre a renda anual e patrimônio.",
+    method: "GET",
+    path: "/api/insights/financial-snapshot",
+    input: {},
+    outputSchema: z.object({
+      totalBalance: z.number().optional(),
+      avgMonthlyIncome: z.number().optional(),
+      avgMonthlyExpense: z.number().optional(),
+      savingsRatePct: z.number().optional().nullable(),
+      emergencyReserveMonths: z.number().optional().nullable(),
+      debtToIncomeRatioPct: z.number().optional().nullable(),
+      totalDebt: z.number().optional(),
+      totalEquityValue: z.number().optional(),
+      totalEquityCost: z.number().optional(),
+      lastCalculatedAt: z.string().optional(),
+    }),
+    readOnly: true,
+  },
+  {
     name: "create_tag",
     title: "Criar tag",
     description: "Cria uma nova tag.",
