@@ -326,6 +326,106 @@ export const insightTools: ToolDef[] = [
     readOnly: true,
   },
   {
+    name: "goal_projections",
+    title: "Projeção de metas",
+    description:
+      "Progresso, prazo, meses restantes e aporte mensal necessário para cada meta financeira do usuário.",
+    method: "GET",
+    path: "/api/insights/goal-projections",
+    input: {},
+    outputSchema: z.object({
+      metas: z.array(
+        z.object({
+          nome: z.string().optional(),
+          atual: z.number().optional(),
+          alvo: z.number().optional(),
+          progressoPct: z.number().optional(),
+          prazo: z.string().optional().nullable(),
+          mesesRestantes: z.number().optional().nullable(),
+          aporteMensalNecessario: z.number().optional().nullable(),
+        }),
+      ),
+    }),
+    readOnly: true,
+  },
+  {
+    name: "active_installments",
+    title: "Parcelas ativas",
+    description:
+      "Quantidade e valor total de parcelas ainda não pagas, com as próximas a vencer.",
+    method: "GET",
+    path: "/api/insights/active-installments",
+    input: {},
+    outputSchema: z.object({
+      count: z.number().optional(),
+      total: z.number().optional(),
+      upcoming: z.array(
+        z.object({
+          description: z.string().optional(),
+          amount: z.number().optional(),
+          currentInstallment: z.number().optional(),
+          totalInstallments: z.number().optional(),
+          date: z.string().optional(),
+        }),
+      ),
+      text: z.string().optional(),
+    }),
+    readOnly: true,
+  },
+  {
+    name: "bill_anomalies",
+    title: "Contas acima da média",
+    description:
+      "Contas recorrentes (aluguel, luz, etc.) cujo valor deste mês veio bem acima da média histórica dos últimos 6 meses.",
+    method: "GET",
+    path: "/api/insights/bill-anomalies",
+    input: {},
+    outputSchema: z.object({
+      data: z.array(
+        z.object({
+          id: z.string().optional(),
+          description: z.string().optional(),
+          category: z.string().optional().nullable(),
+          currentAmount: z.number().optional(),
+          avgAmount: z.number().optional(),
+          pct: z.number().optional(),
+          text: z.string().optional(),
+        }),
+      ),
+    }),
+    readOnly: true,
+  },
+  {
+    name: "subscriptions_overview",
+    title: "Assinaturas e recorrências",
+    description:
+      "Recorrências de despesa ativas (assinaturas, mensalidades), total mensal comprometido e possíveis duplicidades por categoria (ex.: dois streamings). Não indica uso do serviço — o app não tem esse dado, só o financeiro.",
+    method: "GET",
+    path: "/api/insights/subscriptions",
+    input: {},
+    outputSchema: z.object({
+      subscriptions: z.array(
+        z.object({
+          description: z.string().optional(),
+          category: z.string().optional().nullable(),
+          amount: z.number().optional(),
+          frequency: z.string().optional(),
+          monthlyAmount: z.number().optional(),
+        }),
+      ),
+      totalMonthly: z.number().optional(),
+      duplicates: z.array(
+        z.object({
+          category: z.string().optional(),
+          descriptions: z.array(z.string()).optional(),
+          text: z.string().optional(),
+        }),
+      ),
+      text: z.string().optional(),
+    }),
+    readOnly: true,
+  },
+  {
     name: "create_tag",
     title: "Criar tag",
     description: "Cria uma nova tag.",
