@@ -426,6 +426,68 @@ export const insightTools: ToolDef[] = [
     readOnly: true,
   },
   {
+    name: "transport_routine",
+    title: "Rotina de transporte",
+    description:
+      "Detecta quando a sequência atual de dias seguidos com gasto de transporte (Uber, combustível) está bem acima do normal do usuário.",
+    method: "GET",
+    path: "/api/insights/transport-routine",
+    input: {},
+    outputSchema: z.object({
+      data: z.array(
+        z.object({
+          id: z.string().optional(),
+          currentStreak: z.number().optional(),
+          avgStreak: z.number().optional(),
+          text: z.string().optional(),
+        }),
+      ),
+    }),
+    readOnly: true,
+  },
+  {
+    name: "bill_concentration",
+    title: "Dias de maior aperto",
+    description:
+      "Janela de 5 dias, dentro dos próximos 30, com maior concentração de compromissos (transações não pagas + faturas de cartão a vencer).",
+    method: "GET",
+    path: "/api/insights/bill-concentration",
+    input: {},
+    outputSchema: z.object({
+      data: z.array(
+        z.object({
+          id: z.string().optional(),
+          startDate: z.string().optional(),
+          endDate: z.string().optional(),
+          amount: z.number().optional(),
+          sharePct: z.number().optional(),
+          text: z.string().optional(),
+        }),
+      ),
+    }),
+    readOnly: true,
+  },
+  {
+    name: "best_card_day",
+    title: "Melhor dia para comprar no cartão",
+    description:
+      "Avisa quando hoje é véspera do fechamento da fatura de algum cartão — esperar até amanhã para comprar rende mais dias para pagar.",
+    method: "GET",
+    path: "/api/insights/best-card-day",
+    input: {},
+    outputSchema: z.object({
+      data: z.array(
+        z.object({
+          id: z.string().optional(),
+          cardName: z.string().optional(),
+          extraDays: z.number().optional(),
+          text: z.string().optional(),
+        }),
+      ),
+    }),
+    readOnly: true,
+  },
+  {
     name: "create_tag",
     title: "Criar tag",
     description: "Cria uma nova tag.",
