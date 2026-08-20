@@ -245,7 +245,8 @@ export const insightTools: ToolDef[] = [
   {
     name: "behavior_insights",
     title: "Insights de comportamento",
-    description: "Análise de padrões de comportamento financeiro (gastos recorrentes, anomalias, etc).",
+    description:
+      "Observações financeiras já analisadas e prontas para narrar (cada item já vem com um texto pronto em `text`): padrão de dia da semana por categoria, aumento de gasto nos dias após o recebimento de renda, e categorias que sobem nos fins de semana.",
     method: "GET",
     path: "/api/insights/behavior",
     input: {},
@@ -253,11 +254,15 @@ export const insightTools: ToolDef[] = [
       data: z.array(
         z.object({
           id: z.string().optional(),
+          type: z
+            .enum(["category_day_pattern", "post_payday_spike", "weekend_category_increase"])
+            .optional(),
           category: z.string().optional(),
           dayGroup: z.enum(["weekday", "weekend"]).optional(),
-          timeGroup: z.enum(["dawn", "morning", "afternoon", "night"]).optional(),
+          payday: z.number().optional(),
           pct: z.number().optional(),
           count: z.number().optional(),
+          text: z.string().optional(),
         }),
       ),
     }),
