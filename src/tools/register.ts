@@ -3,7 +3,6 @@ import type { ToolDef } from "./types.js";
 import { toolCatalog } from "./catalog/index.js";
 import { env } from "../config.js";
 import * as backend from "../backend/client.js";
-import { getValidAccessToken } from "../backend/session.js";
 
 const pathParamRegex = /:([A-Za-z0-9_]+)/g;
 
@@ -47,8 +46,15 @@ function pathParamNames(def: ToolDef): Set<string> {
   return new Set([...def.path.matchAll(pathParamRegex)].map((m) => m[1]));
 }
 
-/** Registra todos os tools do catálogo num McpServer, resolvendo o backend-husk via a sessão MCP autenticada. */
-export function registerTools(server: McpServer, sessionId: string) {
+/**
+ * Registra todos os tools do catálogo num McpServer.
+ *
+ * O token do backend-husk vem de um resolvedor: no modo OAuth, a sessão MCP
+ * autenticada (renovando via refresh quando necessário); no modo
+ * serviço-a-serviço, o JWT mobile passado em X-CDF-User-Token pelo
+ * backend-husk (o dono do JWT já foi validado pelo backend antes de chamar).
+ */
+export function registerTools(server: McpServer, resolveToken: () => Promise<string>) {
   // Em MCP_TOOLS_MODE=readonly (ex: listagem em diretórios curados), expõe só
   // consultas — oculta criação/edição/exclusão do catálogo.
   const catalog =
@@ -79,7 +85,7 @@ export function registerTools(server: McpServer, sessionId: string) {
             if (!pathParams.has(k)) rest[k] = v;
           }
 
-          const accessToken = await getValidAccessToken(sessionId);
+          const accessToken = await resolveToken();
           const isBodyMethod = def.method === "POST" || def.method === "PUT";
 
           const result = await backend.call(accessToken, def.method, path, {

@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { registerTools } from "../tools/register.js";
+import { getValidAccessToken } from "../backend/session.js";
 
 /**
  * Modo stateless: cada requisição HTTP monta um McpServer + transport novos,
@@ -18,7 +19,13 @@ export async function handleMcpRequest(req: Request, res: Response) {
   }
 
   const server = new McpServer({ name: "vessell-cdf", version: "0.1.0" });
-  registerTools(server, sessionId);
+  // Modo serviço-a-serviço: usa o JWT mobile recebido direto (sem sessão OAuth).
+  registerTools(
+    server,
+    req.mcpUserToken
+      ? async () => req.mcpUserToken as string
+      : async () => getValidAccessToken(sessionId),
+  );
 
   const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
   res.on("close", () => {

@@ -12,6 +12,13 @@ const EnvSchema = z.object({
   ALLOWED_ORIGINS: z.string().default(""),
   /** "full" expõe o catálogo completo; "readonly" só tools de consulta (readOnly: true). */
   MCP_TOOLS_MODE: z.enum(["full", "readonly"]).default("full"),
+  /**
+   * Modo serviço-a-serviço (backend-husk → MCP): se definido, o /mcp aceita
+   * `Authorization: Bearer <MCP_SERVICE_TOKEN>` + `X-CDF-User-Token: <JWT mobile>`
+   * e executa tools do catálogo em nome do usuário, sem fluxo OAuth. O token é
+   * um segredo compartilhado entre os nossos serviços — não exponha.
+   */
+  MCP_SERVICE_TOKEN: z.string().min(16).optional(),
 });
 
 const parsed = EnvSchema.safeParse(process.env);

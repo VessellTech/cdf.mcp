@@ -174,10 +174,12 @@ export const transactionTools: ToolDef[] = [
   {
     name: "list_transactions",
     title: "Listar transações",
-    description: "Lista todas as transações do usuário, com conta/categoria/tags incluídas.",
+    description: "Lista as transações do usuário, com conta/categoria/tags incluídas (mais recentes primeiro).",
     method: "GET",
     path: "/api/transactions",
-    input: {},
+    input: {
+      limit: z.number().int().min(1).max(200).optional().describe("Limita a quantidade de transações retornadas (mais recentes primeiro)"),
+    },
     readOnly: true,
     outputSchema: z.object({ data: z.array(transactionShape) }),
   },

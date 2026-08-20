@@ -101,6 +101,29 @@ const invoiceDetailsShape = invoiceBaseShape.extend({
   fullTransactions: z.array(fullTransactionShape).optional(),
 });
 
+const allocationPreviewShape = z.object({
+  id: z.string().optional(),
+  description: z.string().optional(),
+  amount: z.number().optional(),
+  date: z.string().optional(),
+  cardName: z.string().optional(),
+  closingDay: z.number().optional(),
+  dueDay: z.number().optional(),
+  currentInvoiceMonth: z.number().optional().nullable(),
+  currentInvoiceYear: z.number().optional().nullable(),
+  correctedInvoiceMonth: z.number().optional(),
+  correctedInvoiceYear: z.number().optional(),
+});
+
+const invoiceValidationShape = z.object({
+  cardId: z.string().optional(),
+  cardName: z.string().optional(),
+  previousValue: z.number().optional(),
+  newValue: z.number().optional(),
+  difference: z.number().optional(),
+  needsCorrection: z.boolean().optional(),
+});
+
 export const invoiceTools: ToolDef[] = [
   {
     name: "list_invoices",
@@ -141,6 +164,46 @@ export const invoiceTools: ToolDef[] = [
     input: { cardId: z.string() },
     readOnly: true,
     outputSchema: invoiceWithTransactionsShape,
+  },
+  {
+    name: "next_invoice",
+    title: "Próxima fatura do cartão",
+    description: "Retorna a fatura prevista para o próximo período do cartão.",
+    method: "GET",
+    path: "/api/credit-card-invoices/next/:cardId",
+    input: { cardId: z.string().describe("ID do cartão") },
+    // O backend cria a fatura se ela ainda não existir; não é uma leitura pura.
+    outputSchema: invoiceWithTransactionsShape,
+  },
+  {
+    name: "invoice_allocation_preview",
+    title: "Prévia de alocação de faturas",
+    description: "Lista transações de cartão vinculadas à fatura errada e mostra a alocação esperada.",
+    method: "GET",
+    path: "/api/credit-card-invoices/allocation-preview",
+    input: {},
+    readOnly: true,
+    outputSchema: z.object({ data: z.array(allocationPreviewShape), total: z.number().optional() }),
+  },
+  {
+    name: "invoice_orphan_count",
+    title: "Contar transações órfãs de cartão",
+    description: "Conta despesas de cartão que não possuem vínculo com uma fatura.",
+    method: "GET",
+    path: "/api/credit-card-invoices/orphan-count",
+    input: {},
+    readOnly: true,
+    outputSchema: z.object({ orphanCount: z.number().optional() }),
+  },
+  {
+    name: "validate_current_invoices",
+    title: "Validar faturas atuais",
+    description: "Recalcula o total atual de cada cartão e corrige divergências persistidas.",
+    method: "POST",
+    path: "/api/credit-card-invoices/validate-current-invoice",
+    input: {},
+    destructive: true,
+    outputSchema: z.object({ data: z.array(invoiceValidationShape) }),
   },
   {
     name: "pay_invoice",
