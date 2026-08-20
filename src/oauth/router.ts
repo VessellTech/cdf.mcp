@@ -233,7 +233,7 @@ function renderLoginPage(p: {
     <img src="https://cdf.finance/logo-blue.png" alt="">
     <span><b>CDF</b> <i>Finance</i></span>
   </div>
-  <form method="post" action="/authorize">
+  <form method="post" action="/authorize" webmcp:tool="mcp_login" webmcp:title="Entrar e autorizar cliente MCP" webmcp:description="Autentica com a conta CDF Finance (e-mail e senha) para autorizar um cliente MCP a acessar os dados financeiros do usuário. Campos: e-mail e senha.">
     <h1>Conectar sua IA</h1>
     <p class="sub"><b>${esc(p.clientName ?? "Um cliente MCP")}</b> quer acessar seus dados financeiros. Entre com sua conta do CDF Finance para autorizar.</p>
     <input type="hidden" name="client_id" value="${esc(p.clientId)}">
@@ -242,9 +242,9 @@ function renderLoginPage(p: {
     <input type="hidden" name="code_challenge_method" value="${esc(p.codeChallengeMethod)}">
     <input type="hidden" name="state" value="${esc(p.state)}">
     <label for="email">E-mail</label>
-    <input id="email" name="email" type="email" required autofocus placeholder="voce@email.com">
+    <input id="email" name="email" type="email" required autofocus placeholder="voce@email.com" webmcp:description="E-mail da conta CDF Finance do usuário">
     <label for="password">Senha</label>
-    <input id="password" name="password" type="password" required placeholder="••••••••">
+    <input id="password" name="password" type="password" required placeholder="••••••••" webmcp:description="Senha da conta CDF Finance do usuário (nunca é compartilhada com o cliente MCP)">
     <button type="submit">Entrar e autorizar</button>
     ${p.error ? `<div class="err">${esc(p.error)}</div>` : ""}
   </form>
