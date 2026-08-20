@@ -488,6 +488,38 @@ export const insightTools: ToolDef[] = [
     readOnly: true,
   },
   {
+    name: "can_afford",
+    title: "Posso comprar isso?",
+    description:
+      "Simula uma compra única (a partir de hoje): verifica se o saldo atual cobre, o impacto no saldo projetado de 12 meses (inclusive se cria mês no vermelho) e quanto atrasa cada meta ativa do usuário. Não grava nada, é só simulação.",
+    method: "GET",
+    path: "/api/insights/can-afford",
+    input: {
+      amount: z.number().describe("Valor da compra em reais"),
+    },
+    outputSchema: z.object({
+      amount: z.number().optional(),
+      currentBalance: z.number().optional(),
+      canAffordNow: z.boolean().optional(),
+      months: z.array(
+        z.object({
+          label: z.string().optional(),
+          originalEndingBalance: z.number().optional(),
+          newEndingBalance: z.number().optional(),
+        }),
+      ),
+      newNegativeMonths: z.array(z.string()).optional(),
+      goalImpacts: z.array(
+        z.object({
+          goal: z.string().optional(),
+          delayMonths: z.number().optional(),
+        }),
+      ),
+      text: z.string().optional(),
+    }),
+    readOnly: true,
+  },
+  {
     name: "create_tag",
     title: "Criar tag",
     description: "Cria uma nova tag.",
