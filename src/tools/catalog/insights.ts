@@ -491,40 +491,6 @@ export const insightTools: ToolDef[] = [
     name: "can_afford",
     title: "Posso comprar isso?",
     description:
-      "Simula uma compra única: verifica se o saldo atual cobre, o impacto no saldo projetado de 12 meses (inclusive se cria mês no vermelho) e quanto atrasa cada meta ativa. Não grava nada — é só simulação.",
-    method: "GET",
-    path: "/api/insights/can-afford",
-    input: { amount: z.number().positive().describe("Valor da compra em reais") },
-    outputSchema: z.object({
-      amount: z.number().optional(),
-      currentBalance: z.number().optional(),
-      canAffordNow: z.boolean().optional(),
-      months: z
-        .array(
-          z.object({
-            label: z.string().optional(),
-            originalEndingBalance: z.number().optional(),
-            newEndingBalance: z.number().optional(),
-          }),
-        )
-        .optional(),
-      newNegativeMonths: z.array(z.string()).optional(),
-      goalImpacts: z
-        .array(
-          z.object({
-            goal: z.string().optional(),
-            delayMonths: z.number().optional(),
-          }),
-        )
-        .optional(),
-      text: z.string().optional(),
-    }),
-    readOnly: true,
-  },
-  {
-    name: "can_afford",
-    title: "Posso comprar isso?",
-    description:
       "Simula uma compra única (a partir de hoje): verifica se o saldo atual cobre, o impacto no saldo projetado de 12 meses (inclusive se cria mês no vermelho) e quanto atrasa cada meta ativa do usuário. Não grava nada, é só simulação.",
     method: "GET",
     path: "/api/insights/can-afford",
@@ -541,14 +507,14 @@ export const insightTools: ToolDef[] = [
           originalEndingBalance: z.number().optional(),
           newEndingBalance: z.number().optional(),
         }),
-      ),
+      ).optional().nullable(),
       newNegativeMonths: z.array(z.string()).optional(),
       goalImpacts: z.array(
         z.object({
           goal: z.string().optional(),
           delayMonths: z.number().optional(),
         }),
-      ),
+      ).optional().nullable(),
       text: z.string().optional(),
     }),
     readOnly: true,
