@@ -3,7 +3,8 @@ import { env } from "../config.js";
 import { verifyPkce } from "./pkce.js";
 import * as store from "./store.js";
 import { createSession } from "../backend/session.js";
-import { BackendApiError } from "../backend/client.js";
+import { getValidAccessToken } from "../backend/session.js";
+import { BackendApiError, recordMcpConnection } from "../backend/client.js";
 
 export const oauthRouter = Router();
 
@@ -124,6 +125,22 @@ oauthRouter.post("/token", async (req, res) => {
       return res.status(400).json({ error: "invalid_grant", error_description: "PKCE inválido" });
     }
     const tokens = await store.issueTokenPair(row.clientId, row.sessionId);
+
+    // Best-effort: o cliente MCP efetivamente conectou — registra no
+    // backend-husk ("McpConnection") para os objetivos primários do dashboard.
+    // Falha aqui não derruba a troca do code; o next connect re-registra.
+    try {
+      const client = await store.getClient(row.clientId);
+      const backendToken = await getValidAccessToken(row.sessionId);
+      await recordMcpConnection(backendToken, {
+        clientId: row.clientId,
+        clientName: client?.clientName ?? "Cliente MCP",
+        sessionId: row.sessionId,
+      });
+    } catch (err) {
+      console.error("falha ao registrar conexão MCP:", err);
+    }
+
     return res.json({
       access_token: tokens.accessToken,
       refresh_token: tokens.refreshToken,

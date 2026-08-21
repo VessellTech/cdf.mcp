@@ -92,3 +92,19 @@ export async function call<T>(
   if (!res.ok) throw new BackendApiError(res.status, body);
   return body as T;
 }
+
+/**
+ * Registra a conexão de um cliente MCP (Claude, ChatGPT, ...) no backend-husk
+ * — tabela "McpConnection", upsert por (userId, clientId). Chamado no token
+ * exchange do OAuth; best-effort (falha não derruba a troca do code).
+ */
+export function recordMcpConnection(
+  accessToken: string,
+  params: { clientId: string; clientName: string; sessionId: string },
+): Promise<{ ok: boolean }> {
+  return request<{ ok: boolean }>("/api/mobile/mcp/connection", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    body: JSON.stringify(params),
+  });
+}
