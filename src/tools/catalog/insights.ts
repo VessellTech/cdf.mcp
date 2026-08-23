@@ -520,6 +520,135 @@ export const insightTools: ToolDef[] = [
     readOnly: true,
   },
   {
+    name: "analytics_history",
+    title: "Histórico financeiro mensal",
+    description:
+      "Série histórica contínua (meses com e sem movimento) com saldo reconstruído, patrimônio e estatística elaborada (média/mediana/desvio/variação, tendência por regressão linear, médias móveis 3/6/12m, taxa de poupança). Suporta vida inteira (até 120 meses). Use from/to como YYYY-MM ou YYYY-MM-DD.",
+    method: "GET",
+    path: "/api/analytics/history",
+    input: {
+      from: z.string().optional().describe("Início do intervalo (YYYY-MM ou YYYY-MM-DD) — default 11 meses atrás"),
+      to: z.string().optional().describe("Fim do intervalo (YYYY-MM ou YYYY-MM-DD) — default mês atual"),
+    },
+    outputSchema: z.object({
+      from: z.string().optional(),
+      to: z.string().optional(),
+      currentBalance: z.number().optional(),
+      equityTotal: z.number().optional(),
+      debtTotal: z.number().optional(),
+      months: z
+        .array(
+          z.object({
+            year: z.number().optional(),
+            month: z.number().optional(),
+            label: z.string().optional(),
+            ym: z.string().optional(),
+            income: z.number().optional(),
+            expense: z.number().optional(),
+            net: z.number().optional(),
+            endingBalance: z.number().optional(),
+            equityTotal: z.number().optional(),
+            totalAssets: z.number().optional(),
+            netWorth: z.number().optional(),
+            debtTotal: z.number().optional(),
+            budgetedExpense: z.number().optional(),
+            count: z.number().optional(),
+          }),
+        )
+        .optional(),
+      stats: z
+        .object({
+          income: z.object({ count: z.number().optional(), mean: z.number().optional(), median: z.number().optional(), stddev: z.number().optional(), min: z.number().optional(), max: z.number().optional(), p90: z.number().optional(), cv: z.number().optional() }).optional(),
+          expense: z.object({ count: z.number().optional(), mean: z.number().optional(), median: z.number().optional(), stddev: z.number().optional(), min: z.number().optional(), max: z.number().optional(), p90: z.number().optional(), cv: z.number().optional() }).optional(),
+          net: z.object({ count: z.number().optional(), mean: z.number().optional(), median: z.number().optional(), stddev: z.number().optional(), min: z.number().optional(), max: z.number().optional(), p90: z.number().optional(), cv: z.number().optional() }).optional(),
+          savingsRate: z.object({ count: z.number().optional(), mean: z.number().optional(), median: z.number().optional(), stddev: z.number().optional(), min: z.number().optional(), max: z.number().optional(), p90: z.number().optional(), cv: z.number().optional() }).optional(),
+        })
+        .optional(),
+      trend: z
+        .object({
+          income: z.object({ slope: z.number().optional(), intercept: z.number().optional(), r2: z.number().optional(), direction: z.string().optional() }).optional(),
+          expense: z.object({ slope: z.number().optional(), intercept: z.number().optional(), r2: z.number().optional(), direction: z.string().optional() }).optional(),
+          net: z.object({ slope: z.number().optional(), intercept: z.number().optional(), r2: z.number().optional(), direction: z.string().optional() }).optional(),
+        })
+        .optional(),
+      movingAverage: z
+        .object({
+          net_3m: z.array(z.number()).optional(),
+          net_6m: z.array(z.number()).optional(),
+          net_12m: z.array(z.number()).optional(),
+        })
+        .optional(),
+    }),
+    readOnly: true,
+  },
+  {
+    name: "wealth_evolution",
+    title: "Evolução patrimonial (aporte vs valorização)",
+    description:
+      "Separa crescimento de patrimônio por aporte/resgate (Transaction.equityId) e valorização (EquityValuation.value - cost). Retorna série mensal e resumo com total de aportes, stats e tendência da valorização.",
+    method: "GET",
+    path: "/api/analytics/wealth-evolution",
+    input: {
+      from: z.string().optional().describe("Início (YYYY-MM ou YYYY-MM-DD)"),
+      to: z.string().optional().describe("Fim (YYYY-MM ou YYYY-MM-DD)"),
+    },
+    outputSchema: z.object({
+      from: z.string().optional(),
+      to: z.string().optional(),
+      months: z
+        .array(
+          z.object({
+            ym: z.string().optional(),
+            label: z.string().optional(),
+            aporte: z.number().optional(),
+            resgate: z.number().optional(),
+            equityTotal: z.number().optional(),
+            valorizacao: z.number().optional(),
+          }),
+        )
+        .optional(),
+      summary: z
+        .object({
+          totalAporte: z.number().optional(),
+          totalResgate: z.number().optional(),
+          netAporte: z.number().optional(),
+          statsValorizacao: z.object({ count: z.number().optional(), mean: z.number().optional(), median: z.number().optional(), stddev: z.number().optional(), min: z.number().optional(), max: z.number().optional(), p90: z.number().optional(), cv: z.number().optional() }).optional(),
+          trendValorizacao: z.object({ slope: z.number().optional(), intercept: z.number().optional(), r2: z.number().optional(), direction: z.string().optional() }).optional(),
+        })
+        .optional(),
+    }),
+    readOnly: true,
+  },
+  {
+    name: "category_history",
+    title: "Histórico por categoria",
+    description:
+      "Top N categorias por volume no período com série mensal por categoria e estatística (média/mediana/desvio + tendência). Útil para sazonalidade e vida inteira.",
+    method: "GET",
+    path: "/api/analytics/category-history",
+    input: {
+      from: z.string().optional().describe("Início (YYYY-MM ou YYYY-MM-DD)"),
+      to: z.string().optional().describe("Fim (YYYY-MM ou YYYY-MM-DD)"),
+      top: z.number().optional().describe("Top N categorias (1-20, default 5)"),
+    },
+    outputSchema: z.object({
+      from: z.string().optional(),
+      to: z.string().optional(),
+      top: z.array(z.string()).optional(),
+      series: z
+        .array(
+          z.object({
+            name: z.string().optional(),
+            points: z.array(z.object({ ym: z.string().optional(), value: z.number().optional() })).optional(),
+            stats: z.object({ count: z.number().optional(), mean: z.number().optional(), median: z.number().optional(), stddev: z.number().optional(), min: z.number().optional(), max: z.number().optional(), p90: z.number().optional(), cv: z.number().optional() }).optional(),
+            trend: z.object({ slope: z.number().optional(), intercept: z.number().optional(), r2: z.number().optional(), direction: z.string().optional() }).optional(),
+          }),
+        )
+        .optional(),
+    }),
+    readOnly: true,
+  },
+  {
     name: "create_tag",
     title: "Criar tag",
     description: "Cria uma nova tag.",
