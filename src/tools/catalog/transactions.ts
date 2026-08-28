@@ -247,6 +247,13 @@ export const transactionTools: ToolDef[] = [
       equityId: z.string().optional(),
       costCenterId: z.string().optional(),
       confirmNegativeBalance: z.boolean().optional(),
+      isPaid: z
+        .boolean()
+        .optional()
+        .default(true)
+        .describe(
+          "Esta tool é para transações já efetivadas (padrão: true, aplica o efeito no saldo/fatura imediatamente). Para lançar como pendente sem afetar saldo, passe isPaid: false ou use create_transaction.",
+        ),
     },
     outputSchema: transactionShape,
   },
