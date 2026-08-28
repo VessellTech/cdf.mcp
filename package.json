@@ -1,7 +1,7 @@
 {
   "name": "cdf-mcp-server",
   "private": true,
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "description": "MCP remoto isolado para o app Vessell CDF — conecta Claude/ChatGPT à conta financeira do usuário via a API pública do backend-husk.",
   "scripts": {
