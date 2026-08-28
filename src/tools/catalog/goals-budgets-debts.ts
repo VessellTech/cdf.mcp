@@ -206,4 +206,39 @@ export const goalBudgetDebtTools: ToolDef[] = [
     destructive: true,
     outputSchema: countShape,
   },
+  {
+    name: "debt_payoff_plan",
+    title: "Plano de quitação de dívida",
+    description:
+      "Simula a quitação de UMA dívida: informe targetMonths (quanto pagar por mês pra quitar em N meses) OU monthlyPayment (em quantos meses quita pagando R$X/mês) — nunca os dois. Devolve o valor mensal, total pago, juros totais e o impacto no saldo projetado (inclusive se cria mês no vermelho). Não grava nada, é só simulação.",
+    method: "GET",
+    path: "/api/insights/debt-payoff-plan",
+    input: {
+      debtId: z.string().describe("id da dívida (ver list_debts)"),
+      targetMonths: z.number().optional().describe("Quero quitar em N meses — devolve o valor mensal necessário"),
+      monthlyPayment: z.number().optional().describe("Posso pagar R$X/mês — devolve em quantos meses quita"),
+    },
+    readOnly: true,
+    outputSchema: z.object({
+      debtId: z.string().optional(),
+      debtName: z.string().optional(),
+      remainingAmount: z.number().optional(),
+      interestRatePct: z.number().optional(),
+      monthlyPayment: z.number().optional(),
+      months: z.number().optional(),
+      totalPaid: z.number().optional(),
+      totalInterest: z.number().optional(),
+      projectedImpact: z
+        .array(
+          z.object({
+            label: z.string().optional(),
+            originalEndingBalance: z.number().optional(),
+            newEndingBalance: z.number().optional(),
+          }),
+        )
+        .optional(),
+      newNegativeMonths: z.array(z.string()).optional(),
+      text: z.string().optional(),
+    }),
+  },
 ];
