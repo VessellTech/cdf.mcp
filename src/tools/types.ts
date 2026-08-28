@@ -26,4 +26,11 @@ export interface ToolDef {
   /** Anotações de comportamento (MCP tool annotations). */
   readOnly?: boolean;
   destructive?: boolean;
+  /**
+   * Chaves de topo a remover da resposta do backend antes de devolver ao
+   * cliente MCP (ex: campos sensíveis que a rota original do app precisa
+   * mas que a tool não deveria expor pro modelo, mesmo que o outputSchema
+   * já não os declare — o outputSchema não filtra o texto/JSON bruto).
+   */
+  redactFields?: string[];
 }

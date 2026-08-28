@@ -49,7 +49,8 @@ export const userTools: ToolDef[] = [
     path: "/api/user/me",
     input: {},
     readOnly: true,
-    outputSchema: z.object(fullProfileShape),
+    outputSchema: z.object(fullProfileShape).omit({ phone: true }),
+    redactFields: ["phone"],
   },
   {
     name: "update_profile",

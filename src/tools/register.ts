@@ -95,7 +95,11 @@ export function registerTools(server: McpServer, resolveToken: () => Promise<str
             body: isBodyMethod ? rest : undefined,
           });
 
-          const sanitized = redactLargeInlineData(result);
+          let sanitized = redactLargeInlineData(result);
+          if (def.redactFields?.length && sanitized && typeof sanitized === "object" && !Array.isArray(sanitized)) {
+            sanitized = { ...(sanitized as Record<string, unknown>) };
+            for (const field of def.redactFields) delete (sanitized as Record<string, unknown>)[field];
+          }
           // O SDK valida structuredContent contra o outputSchema (objeto).
           // Arrays no topo vêm embrulhados em { data } — texto e structured
           // ficam consistentes.
