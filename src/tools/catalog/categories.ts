@@ -113,7 +113,7 @@ export const categoryTools: ToolDef[] = [
     method: "POST",
     path: "/api/cost-centers",
     input: {
-      name: z.string(),
+      name: z.string().describe("Nome do centro de custo"),
       description: z.string().optional().describe("Descrição livre do centro de custo"),
     },
     outputSchema: costCenterShape,
@@ -126,8 +126,8 @@ export const categoryTools: ToolDef[] = [
     path: "/api/cost-centers/:id",
     input: {
       id: z.string().describe("ID do centro de custo a atualizar"),
-      name: z.string().optional(),
-      description: z.string().optional(),
+      name: z.string().optional().describe("Novo nome do centro de custo"),
+      description: z.string().optional().describe("Nova descrição livre"),
     },
     outputSchema: costCenterShape,
   },

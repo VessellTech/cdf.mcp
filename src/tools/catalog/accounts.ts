@@ -82,11 +82,11 @@ export const accountTools: ToolDef[] = [
     path: "/api/accounts/:id",
     input: {
       id: z.string().describe("ID da conta a atualizar"),
-      name: z.string().optional(),
+      name: z.string().optional().describe("Novo nome da conta"),
       type: z.string().optional().describe("CHECKING, SAVINGS, WALLET ou INVESTMENT"),
       balance: z.number().optional().describe("Sobrescreve o saldo diretamente (não é uma transação — não afeta fatura de cartão nem histórico)"),
       currency: z.string().optional().describe("Moeda ISO 4217"),
-      bankCode: z.string().optional(),
+      bankCode: z.string().optional().describe("Código do banco"),
       color: z.string().optional().describe("Cor hex para exibição, ex: #3B82F6"),
       balanceDate: z.string().optional().describe("Data ISO de referência do saldo informado em `balance`"),
     },
