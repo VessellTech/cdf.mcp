@@ -352,7 +352,7 @@ export const insightTools: ToolDef[] = [
     name: "active_installments",
     title: "Parcelas ativas",
     description:
-      "Quantidade e valor total de parcelas ainda não pagas, com as próximas a vencer.",
+      "Parcelas de compras parceladas (não faturas de cartão — qualquer forma de pagamento com totalInstallments > 1) ainda não pagas. `count`/`total` somam TODAS as parcelas em aberto, sem filtro de data — inclui parcelas já vencidas. `upcoming` traz até 5 parcelas com a data mais próxima, ordenadas de forma crescente; se houver parcela vencida e não paga, ela aparece primeiro (não é só futuro). Use esta ferramenta pra saber o compromisso do usuário com compras parceladas em geral; para o total da fatura mensal de um cartão específico use current_invoice/next_invoice, e para faturas de cartão pendentes em geral use list_pending_invoices.",
     method: "GET",
     path: "/api/insights/active-installments",
     input: {},
