@@ -1,0 +1,86 @@
+Business Source License 1.1
+
+Licensor: VessellTech
+Licensed Work: cdf-mcp-server
+Licensed Work Version: 0.1.7
+Additional Use Grant:
+
+  You may use, reproduce, modify and distribute the Licensed Work for any
+  purpose other than a Production Use of a Competing Product.
+
+  "Production Use" means any use in a production environment, including
+  internal commercial use or offering the Licensed Work to third parties
+  as a hosted or managed service.
+
+  "Competing Product" means any personal finance management software or
+  service that offers substantially similar functionality to CDF Finance,
+  including but not limited to account/transaction management, budgeting,
+  goal/debt tracking, and financial insights — whether as a standalone
+  product or as part of a broader offering.
+
+  For the avoidance of doubt, the following are NOT considered Production
+  Use of a Competing Product and are expressly permitted:
+
+  (a) Use of the Licensed Work to connect to, interoperate with, or
+      develop integrations for the official CDF Finance service at
+      cdf.finance / api.vessell.app;
+  (b) Personal, academic, or research use;
+  (c) Evaluation, testing, and development;
+  (d) Contributing improvements back to this repository via pull request.
+
+Change Date: 2030-09-01
+Change License: Apache License, Version 2.0 (Apache-2.0)
+
+For purposes of this License:
+
+* "Change Date" means the date identified above.
+* "Change License" means the license identified above.
+* On the Change Date, the Licensed Work will automatically be governed
+  by the Change License.
+
+----------------------------------------------------------------------
+
+Business Source License 1.1 — Terms and Conditions
+
+1. Grant of Rights
+
+   Subject to the terms and conditions of this License, the Licensor
+   hereby grants you a non-exclusive, worldwide, royalty-free license
+   to use, reproduce, modify, and distribute the Licensed Work, subject
+   to the limitations set forth in this License and the Additional Use
+   Grant.
+
+2. Limitations
+
+   You may not make Production Use of the Licensed Work as a Competing
+   Product. Any other use is permitted under the Additional Use Grant.
+
+3. Conditions
+
+   You must give any recipient of the Licensed Work a copy of this
+   License. You must cause any modified files to carry prominent notices
+   stating that you changed the files.
+
+4. No Warranty; Limitation of Liability
+
+   THE LICENSED WORK IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE LICENSOR BE LIABLE FOR ANY CLAIM, DAMAGES OR
+   OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+   ARISING FROM, OUT OF OR IN CONNECTION WITH THE LICENSED WORK OR THE
+   USE OR OTHER DEALINGS IN THE LICENSED WORK.
+
+5. Change License
+
+   On the Change Date, the Licensed Work will be made available under
+   the Change License. Licensor may, at its option, make the Licensed
+   Work available under the Change License earlier than the Change Date.
+
+----------------------------------------------------------------------
+
+Apache License, Version 2.0 — will apply automatically from Change Date.
+See https://www.apache.org/licenses/LICENSE-2.0 for the full text.
+
+For licensing inquiries (e.g., commercial use as a competing product):
+contact VessellTech at support@cdf.finance

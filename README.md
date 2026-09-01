@@ -144,3 +144,11 @@ npx @modelcontextprotocol/inspector
   nunca é exposto ao client MCP.
 - Cada sessão MCP é um "device" distinto no backend-husk — revogável em
   `DELETE /api/mobile/devices/:id` sem afetar outros logins do usuário.
+
+## Licença
+
+Source-available sob [Business Source License 1.1 (BUSL-1.1)](./LICENSE) — código aberto para auditoria, uso pessoal, acadêmico e integração com o serviço oficial CDF Finance (`cdf.finance` / `api.vessell.app`).
+
+**Não é permitido** uso em produção como produto concorrente de gestão financeira pessoal (hosted/managed). Em `2030-09-01` a licença converte automaticamente para `Apache-2.0`.
+
+Para licenciamento comercial concorrente: `support@cdf.finance`.
