@@ -87,10 +87,16 @@ export const equityTools: ToolDef[] = [
   {
     name: "add_equity_valuation",
     title: "Adicionar avaliação",
-    description: "Registra uma nova avaliação de valor para um investimento.",
+    description:
+      "Adiciona um ponto no histórico de valor de um investimento (`id` = id do investimento/equity, não da avaliação). Sempre insere uma nova linha, mesmo se já houver avaliação na mesma data — não sobrescreve nem deduplica. `date` é opcional (default agora); use pra registrar uma avaliação retroativa. Efeito colateral: o `value`/`cost` do investimento em si também é atualizado para os valores desta avaliação, então ela passa a ser o valor 'atual' retornado por list_equities. Diferença de update_equity: use esta ferramenta pra registrar histórico com data específica sem tocar em outros campos do investimento (nome, ticker etc.); use update_equity quando quiser editar o investimento e deixar o valor atualizado datado de hoje.",
     method: "POST",
     path: "/api/equities/:id/valuations",
-    input: { id: z.string(), value: z.number(), date: z.string().optional() },
+    input: {
+      id: z.string().describe("Id do investimento (Equity), não da avaliação"),
+      value: z.number().describe("Novo valor de mercado do investimento"),
+      date: z.string().optional().describe("Data da avaliação (ISO). Default: agora. Use pra backfill retroativo"),
+      cost: z.number().optional().describe("Custo/valor investido nesta data. Default: igual a value (sem ganho/perda registrado se omitido)"),
+    },
     outputSchema: equityValuationSchema,
   },
   {
