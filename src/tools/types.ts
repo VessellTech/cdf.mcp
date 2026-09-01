@@ -11,6 +11,13 @@ export interface ToolDef {
   /** Template de rota do backend-husk, ex: "/api/accounts/:id". */
   path: string;
   /**
+   * Quando o path do backend depende do valor de um parâmetro (ex: uma tool
+   * consolidada que escolhe entre duas rotas GET conforme um enum), sobrepõe
+   * `path`. Recebe os args brutos da tool. Os campos usados aqui pra montar o
+   * path continuam indo pro backend como query/body normalmente também.
+   */
+  resolvePath?: (values: Record<string, unknown>) => string;
+  /**
    * Schema de input. Chaves que casam com ":nome" no path viram parâmetro de
    * rota; as demais viram query string (GET/DELETE) ou corpo JSON (POST/PUT).
    */

@@ -397,7 +397,7 @@ export const insightTools: ToolDef[] = [
     name: "active_installments",
     title: "Parcelas ativas",
     description:
-      "Parcelas de compras parceladas (não faturas de cartão — qualquer forma de pagamento com totalInstallments > 1) ainda não pagas. `count`/`total` somam TODAS as parcelas em aberto, sem filtro de data — inclui parcelas já vencidas. `upcoming` traz até 5 parcelas com a data mais próxima, ordenadas de forma crescente; se houver parcela vencida e não paga, ela aparece primeiro (não é só futuro). Use esta ferramenta pra saber o compromisso do usuário com compras parceladas em geral; para o total da fatura mensal de um cartão específico use current_invoice/next_invoice, e para faturas de cartão pendentes em geral use list_pending_invoices.",
+      "Parcelas de compras parceladas (não faturas de cartão — qualquer forma de pagamento com totalInstallments > 1) ainda não pagas. `count`/`total` somam TODAS as parcelas em aberto, sem filtro de data — inclui parcelas já vencidas. `upcoming` traz até 5 parcelas com a data mais próxima, ordenadas de forma crescente; se houver parcela vencida e não paga, ela aparece primeiro (não é só futuro). Use esta ferramenta pra saber o compromisso do usuário com compras parceladas em geral; para o total da fatura mensal de um cartão específico use invoice_for_period, e para faturas de cartão pendentes em geral use list_pending_invoices.",
     method: "GET",
     path: "/api/insights/active-installments",
     input: {},
@@ -704,5 +704,28 @@ export const insightTools: ToolDef[] = [
       color: z.string().optional().describe("Cor da tag (ex: hex '#RRGGBB')"),
     },
     outputSchema: tagSchema,
+  },
+  {
+    name: "update_tag",
+    title: "Atualizar tag",
+    description: "Atualiza nome e/ou cor de uma tag existente do usuário autenticado (`id` = id da tag). Campos omitidos mantêm o valor atual. `count` retorna 0 se o id não existir ou não pertencer ao usuário (sem erro).",
+    method: "PUT",
+    path: "/api/tags/:id",
+    input: {
+      id: z.string().describe("Id da tag a atualizar"),
+      name: z.string().optional().describe("Novo nome"),
+      color: z.string().optional().describe("Nova cor (ex: hex '#RRGGBB')"),
+    },
+    outputSchema: z.object({ count: z.number().optional() }),
+  },
+  {
+    name: "delete_tag",
+    title: "Excluir tag",
+    description: "Exclui uma tag permanentemente (`id` = id da tag). Não afeta as transações que a usavam além de removê-la delas (relação N:N com cascade). `count` retorna 0 se o id não existir ou não pertencer ao usuário (sem erro).",
+    method: "DELETE",
+    path: "/api/tags/:id",
+    input: { id: z.string().describe("Id da tag a excluir") },
+    destructive: true,
+    outputSchema: z.object({ count: z.number().optional() }),
   },
 ];

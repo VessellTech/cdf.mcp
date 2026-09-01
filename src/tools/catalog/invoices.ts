@@ -141,7 +141,7 @@ export const invoiceTools: ToolDef[] = [
   {
     name: "list_pending_invoices",
     title: "Faturas pendentes",
-    description: "Lista as faturas de cartão já fechadas e ainda não totalmente pagas (status CLOSED, OVERDUE ou PARTIAL), ordenadas por data de vencimento crescente. Não inclui faturas OPEN (ciclo ainda em curso, acumulando compras) nem PAID. Use current_invoice/next_invoice para o valor da fatura de UM cartão específico (inclusive a que ainda está aberta); use esta tool para o panorama de faturas de cartão pendentes em geral.",
+    description: "Lista as faturas de cartão já fechadas e ainda não totalmente pagas (status CLOSED, OVERDUE ou PARTIAL), ordenadas por data de vencimento crescente. Não inclui faturas OPEN (ciclo ainda em curso, acumulando compras) nem PAID. Use invoice_for_period para o valor da fatura de UM cartão específico (inclusive a que ainda está aberta); use esta tool para o panorama de faturas de cartão pendentes em geral.",
     method: "GET",
     path: "/api/credit-card-invoices/pending",
     input: {},
@@ -151,7 +151,7 @@ export const invoiceTools: ToolDef[] = [
   {
     name: "get_invoice",
     title: "Detalhe de fatura",
-    description: "Detalhe completo de uma fatura de cartão específica: dados do cartão, os vínculos de transação (transactions) e as transações completas (fullTransactions, com categoria/parcela/etc). `id` é o id da fatura (CreditCardInvoice), não do cartão — para buscar pela fatura ativa de um cartão sem saber o id da fatura use current_invoice.",
+    description: "Detalhe completo de uma fatura de cartão específica: dados do cartão, os vínculos de transação (transactions) e as transações completas (fullTransactions, com categoria/parcela/etc). `id` é o id da fatura (CreditCardInvoice), não do cartão — para buscar pela fatura ativa de um cartão sem saber o id da fatura use invoice_for_period.",
     method: "GET",
     path: "/api/credit-card-invoices/:id",
     input: { id: z.string().describe("Id da fatura (CreditCardInvoice)") },
@@ -159,22 +159,18 @@ export const invoiceTools: ToolDef[] = [
     outputSchema: invoiceDetailsShape,
   },
   {
-    name: "current_invoice",
-    title: "Fatura atual do cartão",
+    name: "invoice_for_period",
+    title: "Fatura do cartão (atual ou próxima)",
     description:
-      "Fatura 'corrente' de um cartão: a mais antiga ainda não paga (isPaid = false), qualquer que seja seu status; se não houver nenhuma pendente, cai para a fatura do período vigente calculada pelo dia de fechamento/vencimento do cartão. Sem transações completas (só os vínculos de valor). Efeito colateral: se a fatura do período vigente ainda não existir, ela é criada (linha OPEN com total 0) — não é uma leitura pura. `cardId` é o id do cartão, não da fatura.",
+      "Fatura de um cartão pro período pedido em `period` (default 'current'). 'current': a mais antiga ainda não paga (isPaid = false), qualquer que seja seu status; se não houver nenhuma pendente, cai pra fatura do período vigente calculada pelo dia de fechamento/vencimento do cartão. 'next': fatura prevista pro ciclo seguinte ao atual (mês seguinte, mesma lógica de fechamento/vencimento) — use pra saber quanto já está comprometido no próximo fechamento antes dele fechar. Sem transações completas (só os vínculos de valor). Efeito colateral em ambos os casos: se a fatura do período pedido ainda não existir, ela é criada (linha OPEN com total 0) — não é uma leitura pura. `cardId` é o id do cartão, não da fatura.",
     method: "GET",
     path: "/api/credit-card-invoices/current/:cardId",
-    input: { cardId: z.string().describe("Id do cartão (Card)") },
-    outputSchema: invoiceWithTransactionsShape,
-  },
-  {
-    name: "next_invoice",
-    title: "Próxima fatura do cartão",
-    description: "Fatura prevista para o ciclo seguinte ao atual do cartão (mês seguinte, mesma lógica de fechamento/vencimento). Efeito colateral: cria a fatura no banco se ainda não existir (linha OPEN com total 0) — não é uma leitura pura. Use para saber quanto já está comprometido no próximo fechamento antes mesmo dele fechar; para a fatura em aberto agora use current_invoice.",
-    method: "GET",
-    path: "/api/credit-card-invoices/next/:cardId",
-    input: { cardId: z.string().describe("Id do cartão (Card)") },
+    resolvePath: (v) =>
+      `/api/credit-card-invoices/${v.period === "next" ? "next" : "current"}/${encodeURIComponent(String(v.cardId))}`,
+    input: {
+      cardId: z.string().describe("Id do cartão (Card)"),
+      period: z.enum(["current", "next"]).optional().describe("Default: 'current'"),
+    },
     outputSchema: invoiceWithTransactionsShape,
   },
   {

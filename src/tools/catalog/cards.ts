@@ -25,7 +25,7 @@ export const cardTools: ToolDef[] = [
     name: "list_cards",
     title: "Listar cartões",
     description:
-      "Lista os cartões de crédito do usuário. `currentInvoice` é o total da fatura mais próxima ainda não paga (ordenada por year/month) — 0 se não houver fatura em aberto. Para o valor completo de uma fatura específica (aberta ou fechada) use as tools de fatura (current_invoice/next_invoice/list_pending_invoices), não este campo.",
+      "Lista os cartões de crédito do usuário. `currentInvoice` é o total da fatura mais próxima ainda não paga (ordenada por year/month) — 0 se não houver fatura em aberto. Para o valor completo de uma fatura específica (aberta ou fechada) use as tools de fatura (invoice_for_period/list_pending_invoices), não este campo.",
     method: "GET",
     path: "/api/cards",
     input: {},

@@ -79,7 +79,7 @@ export function registerTools(server: McpServer, resolveToken: () => Promise<str
       },
       async (args: Record<string, unknown>) => {
         try {
-          const path = buildPath(def, args);
+          const path = def.resolvePath ? def.resolvePath(args) : buildPath(def, args);
           const rest: Record<string, unknown> = {};
           for (const [k, v] of Object.entries(args)) {
             if (!pathParams.has(k)) rest[k] = v;
