@@ -174,11 +174,16 @@ export const transactionTools: ToolDef[] = [
   {
     name: "list_transactions",
     title: "Listar transações",
-    description: "Lista as transações do usuário, com conta/categoria/tags incluídas (mais recentes primeiro).",
+    description:
+      "Lista as transações do usuário (inclusive de contas conjuntas onde ele é membro), com categoria/conta/cartão/centro de custo/agente/tags já incluídos, mais recentes primeiro (por `date`, não por criação). Sem `from`/`to`/`limit`, traz o histórico inteiro — para não estourar o contexto, use `limit` (e pagine com `offset` se precisar de mais) ou restrinja com `from`/`to`. Para só o que está por vencer/pendente use upcoming_transactions; para totais agregados por mês use analytics_history ou o endpoint de summary.",
     method: "GET",
     path: "/api/transactions",
     input: {
-      limit: z.number().int().min(1).max(200).optional().describe("Limita a quantidade de transações retornadas (mais recentes primeiro)"),
+      from: z.string().optional().describe("Data ISO — só transações com date >= from. Default: sem limite inferior"),
+      to: z.string().optional().describe("Data ISO — só transações com date <= to. Default: sem limite superior"),
+      limit: z.number().int().min(1).max(200).optional().describe("Limita a quantidade de transações retornadas (mais recentes primeiro). Default: sem limite"),
+      offset: z.number().int().min(0).optional().describe("Pula os N primeiros resultados — use com limit para paginar"),
+      userId: z.string().optional().describe("Só para planejadores (mobilePlanners): id de um cliente vinculado, para ver as transações dele em vez das próprias. Omitido = transações do próprio usuário autenticado. Retorna 403 se o usuário autenticado não for planejador desse cliente"),
     },
     readOnly: true,
     outputSchema: z.object({ data: z.array(transactionShape) }),
@@ -186,13 +191,14 @@ export const transactionTools: ToolDef[] = [
   {
     name: "upcoming_transactions",
     title: "Próximas transações",
-    description: "Lista transações dos próximos dias (agendadas/pendentes) com resumo.",
+    description:
+      "Lista transações INCOME/EXPENSE (não TRANSFER) dos próximos dias com resumo agregado de `upcoming` (dentro do range) e `overdue` (vencidas e ainda não pagas, sempre incluídas independente do range). `status` filtra por isPaid: default 'pending' (só não pagas) — use 'all' pra ver pagas e pendentes juntas no período.",
     method: "GET",
     path: "/api/transactions/upcoming",
     input: {
       from: z.string().optional().describe("Data ISO início, default hoje"),
       to: z.string().optional().describe("Data ISO fim, default +30 dias"),
-      status: z.enum(["pending", "paid", "all"]).optional(),
+      status: z.enum(["pending", "paid", "all"]).optional().describe("Default: pending (só transações não pagas)"),
     },
     readOnly: true,
     outputSchema: upcomingShape,
