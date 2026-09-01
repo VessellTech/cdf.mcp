@@ -523,7 +523,7 @@ export const insightTools: ToolDef[] = [
     name: "analytics_history",
     title: "Histórico financeiro mensal",
     description:
-      "Série histórica contínua (meses com e sem movimento) com saldo reconstruído, patrimônio e estatística elaborada (média/mediana/desvio/variação, tendência por regressão linear, médias móveis 3/6/12m, taxa de poupança). Suporta vida inteira (até 120 meses). Use from/to como YYYY-MM ou YYYY-MM-DD.",
+      "Série histórica contínua (meses com e sem movimento) com saldo reconstruído, patrimônio e estatística elaborada (média/mediana/desvio/variação, tendência por regressão linear, médias móveis 3/6/12m, taxa de poupança). Suporta vida inteira (até 120 meses). Use from/to como YYYY-MM ou YYYY-MM-DD. Use esta ferramenta pro histórico mensal geral (saldo/patrimônio/receita/despesa); para série por categoria use category_history, para separar aporte de valorização em investimentos use wealth_evolution, e para um retrato único do momento atual (não série) use financial_snapshot.",
     method: "GET",
     path: "/api/analytics/history",
     input: {
