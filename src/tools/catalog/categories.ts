@@ -55,7 +55,7 @@ export const categoryTools: ToolDef[] = [
     method: "POST",
     path: "/api/categories",
     input: {
-      name: z.string(),
+      name: z.string().describe("Nome da categoria/subcategoria"),
       type: z.string().describe("EXPENSE ou INCOME. Se globalCategoryId/globalSubcategoryId for informado, o type é herdado dali e precisa bater com o valor enviado aqui"),
       icon: z.string().optional().describe("Nome do ícone, ex: 'shopping-cart'"),
       color: z.string().optional().describe("Cor hex, ex: #3B82F6"),
@@ -74,10 +74,10 @@ export const categoryTools: ToolDef[] = [
     path: "/api/categories/:id",
     input: {
       id: z.string().describe("ID da categoria a atualizar"),
-      name: z.string().optional(),
+      name: z.string().optional().describe("Novo nome da categoria/subcategoria"),
       type: z.string().optional().describe("EXPENSE ou INCOME"),
-      icon: z.string().optional(),
-      color: z.string().optional(),
+      icon: z.string().optional().describe("Nome do ícone, ex: 'shopping-cart'"),
+      color: z.string().optional().describe("Cor hex, ex: #3B82F6"),
       parentId: z.string().optional().describe("ID de outra categoria do usuário para tornar esta uma subcategoria dela"),
       globalCategoryId: z.string().optional().describe("ID de uma categoria do catálogo global para vincular"),
       globalSubcategoryId: z.string().optional().describe("ID de uma subcategoria do catálogo global para vincular"),
