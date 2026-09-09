@@ -471,6 +471,31 @@ export const insightTools: ToolDef[] = [
     readOnly: true,
   },
   {
+    name: "subscription_renewals",
+    title: "Próxima cobrança de assinaturas",
+    description:
+      "Data exata da próxima cobrança de cada recorrência de despesa ativa (RecurringTransaction), recalculada na hora (não usa o nextDueDate salvo, que fica desatualizado após a primeira ocorrência). `entity` traz o nome da marca reconhecida (ex: 'Canva', 'Netflix') quando a descrição bate com o catálogo de merchants conhecidos, senão repete a descrição. Use `query` pra perguntas específicas tipo 'quando renova minha assinatura do Canva' — filtra por nome do merchant ou trecho da descrição, case-insensitive. Sem `query`, lista tudo.",
+    method: "GET",
+    path: "/api/insights/subscription-renewals",
+    input: {
+      query: z.string().optional().describe("Filtra por nome do merchant (ex: 'canva') ou trecho da descrição da recorrência. Omita pra listar todas."),
+    },
+    outputSchema: z.object({
+      data: z.array(
+        z.object({
+          entity: z.string().optional(),
+          description: z.string().optional(),
+          amount: z.number().optional(),
+          frequency: z.string().optional(),
+          nextRenewal: z.string().optional(),
+          daysUntil: z.number().optional(),
+        }),
+      ),
+      text: z.string().optional(),
+    }),
+    readOnly: true,
+  },
+  {
     name: "transport_routine",
     title: "Rotina de transporte",
     description:
