@@ -10,7 +10,7 @@ const DATA_URI_RE = /^data:[a-zA-Z0-9.+-]+\/[a-zA-Z0-9.+-]+;base64,/;
 const MAX_STRING_LEN = 4000;
 
 /**
- * Alguns campos do backend-husk guardam imagem inline como data URL base64
+ * Alguns campos da API guardam imagem inline como data URL base64
  * (ex: User.picture) em vez de uma URL — ótimo pro app mobile, péssimo pra um
  * cliente MCP: já vimos um payload de 1.4MB estourar o contexto do Claude.
  * Troca qualquer data URI (e qualquer string absurdamente longa, de forma
@@ -49,10 +49,10 @@ function pathParamNames(def: ToolDef): Set<string> {
 /**
  * Registra todos os tools do catálogo num McpServer.
  *
- * O token do backend-husk vem de um resolvedor: no modo OAuth, a sessão MCP
+ * O token da API vem de um resolvedor: no modo OAuth, a sessão MCP
  * autenticada (renovando via refresh quando necessário); no modo
- * serviço-a-serviço, o JWT mobile passado em X-CDF-User-Token pelo
- * backend-husk (o dono do JWT já foi validado pelo backend antes de chamar).
+ * serviço-a-serviço, o JWT do usuário passado em X-CDF-User-Token pelo
+ * serviço interno (o dono do JWT já foi validado antes de chamar).
  */
 export function registerTools(server: McpServer, resolveToken: () => Promise<string>) {
   // Em MCP_TOOLS_MODE=readonly (ex: listagem em diretórios curados), expõe só

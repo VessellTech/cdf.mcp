@@ -6,7 +6,7 @@ import { isPublicMcpPayload } from "../mcp/public.js";
 declare module "express-serve-static-core" {
   interface Request {
     mcpSessionId?: string;
-    /** Só no modo serviço-a-serviço: JWT mobile do usuário (backend-husk → MCP). */
+    /** Só no modo serviço-a-serviço: JWT do usuário, repassado pelo serviço interno. */
     mcpUserToken?: string;
     /** Requisição sem token com apenas métodos públicos (initialize, tools/list…). */
     mcpAnonymous?: boolean;
@@ -20,9 +20,9 @@ declare module "express-serve-static-core" {
  * catálogo antes de logar. Um Bearer presente é sempre validado, mesmo nesses
  * métodos. `tools/call` e demais métodos continuam exigindo token.
  *
- * Modo serviço-a-serviço (backend-husk → MCP): quando `MCP_SERVICE_TOKEN` está
+ * Modo serviço-a-serviço (serviço interno → MCP): quando `MCP_SERVICE_TOKEN` está
  * configurado e o Bearer é exatamente esse token, a sessão é resolvida para o
- * JWT mobile do usuário enviado em `X-CDF-User-Token` (o backend-husk já o
+ * JWT do usuário enviado em `X-CDF-User-Token` (o serviço interno já o
  * validou ao receber a request do app). Nesse modo não há sessão OAuth: o
  * executor de tools usa o token fornecido direto, em vez de resolver a sessão.
  */

@@ -1,9 +1,9 @@
 import { pgTable, text, timestamp, boolean, jsonb, uuid } from "drizzle-orm/pg-core";
 
 /**
- * Schema isolado deste serviço (banco Postgres próprio na Railway).
- * Nunca compartilha tabelas/migrations com o backend-husk — a única
- * ponte entre os dois serviços é HTTP (ver src/backend/client.ts).
+ * Schema isolado deste serviço (banco Postgres próprio).
+ * Nunca compartilha tabelas/migrations com a API — a única
+ * ponte entre os dois é HTTP (ver src/backend/client.ts).
  */
 
 // Clients MCP registrados via Dynamic Client Registration (Claude/ChatGPT
@@ -15,8 +15,8 @@ export const oauthClients = pgTable("oauth_clients", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
-// Sessão de login: guarda o par access/refresh token do backend-husk
-// (mobile JWT, HS256) obtido via POST /api/mobile/auth/login, criptografado
+// Sessão de login: guarda o par access/refresh token da API
+// (JWT, HS256) obtido no login do usuário, criptografado
 // em repouso. Uma sessão pode ser reaproveitada por múltiplos tokens MCP
 // emitidos (refresh do MCP não exige novo login).
 export const sessions = pgTable("sessions", {

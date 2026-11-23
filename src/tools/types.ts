@@ -8,7 +8,7 @@ export interface ToolDef {
   title: string;
   description: string;
   method: HttpMethod;
-  /** Template de rota do backend-husk, ex: "/api/accounts/:id". */
+  /** Template de rota da API, ex: "/api/accounts/:id". */
   path: string;
   /**
    * Quando o path do backend depende do valor de um parâmetro (ex: uma tool

@@ -7,7 +7,7 @@ import { getValidAccessToken } from "../backend/session.js";
 /**
  * Modo stateless: cada requisição HTTP monta um McpServer + transport novos,
  * fechando ao final. Evita guardar estado de MCP em memória entre requests
- * (Railway pode rotear requisições da mesma conexão lógica para instâncias
+ * (o host pode rotear requisições da mesma conexão lógica para instâncias
  * diferentes) — a única coisa que precisa persistir entre chamadas é a
  * sessão OAuth (já é feito no Postgres, ver src/backend/session.ts).
  *
@@ -22,7 +22,7 @@ export async function handleMcpRequest(req: Request, res: Response) {
   }
 
   const server = new McpServer({ name: "vessell-cdf", version: "0.1.0" });
-  // Modo serviço-a-serviço: usa o JWT mobile recebido direto (sem sessão OAuth).
+  // Modo serviço-a-serviço: usa o JWT do usuário recebido direto (sem sessão OAuth).
   registerTools(
     server,
     req.mcpAnonymous

@@ -6,7 +6,7 @@ import * as backend from "./client.js";
 
 const REFRESH_SKEW_MS = 60_000; // renova 60s antes do vencimento anunciado (expires_in)
 
-/** Cria a sessão a partir de um login bem-sucedido no backend-husk. */
+/** Cria a sessão a partir de um login bem-sucedido na API do CDF Finance. */
 export async function createSession(email: string, password: string): Promise<string> {
   const tempSessionId = crypto.randomUUID();
   const result = await backend.login(email, password, tempSessionId);
@@ -26,7 +26,7 @@ export async function createSession(email: string, password: string): Promise<st
   return row.id;
 }
 
-/** Retorna um access token válido do backend-husk para a sessão, renovando se necessário. */
+/** Retorna um access token válido da API para a sessão, renovando se necessário. */
 export async function getValidAccessToken(sessionId: string): Promise<string> {
   const row = await db.query.sessions.findFirst({ where: eq(sessions.id, sessionId) });
   if (!row) throw new Error("sessão inexistente");

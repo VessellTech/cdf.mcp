@@ -6,7 +6,7 @@ if (key.length !== 32) {
   throw new Error("TOKEN_ENCRYPTION_KEY precisa decodificar (base64) para 32 bytes");
 }
 
-/** AES-256-GCM: usado para guardar os tokens do backend-husk em repouso. */
+/** AES-256-GCM: usado para guardar as credenciais de sessão em repouso. */
 export function encrypt(plaintext: string): string {
   const iv = randomBytes(12);
   const cipher = createCipheriv("aes-256-gcm", key, iv);

@@ -10,8 +10,8 @@ export const oauthRouter = Router();
 
 /**
  * Authorization server "combinado": este serviço é ao mesmo tempo o
- * Authorization Server e o Resource Server do MCP. Não existe OAuth no
- * backend-husk (ele usa JWT próprio HS256 via /api/mobile/auth/login), então
+ * Authorization Server e o Resource Server do MCP. A API do CDF Finance não
+ * oferece OAuth (usa JWT próprio HS256 no login), então
  * em vez de proxear um AS externo, este servidor troca login/senha do app
  * por um token opaco do MCP — o par access/refresh do backend fica só aqui,
  * nunca é exposto ao client (Claude/ChatGPT).
@@ -127,7 +127,7 @@ oauthRouter.post("/token", async (req, res) => {
     const tokens = await store.issueTokenPair(row.clientId, row.sessionId);
 
     // Best-effort: o cliente MCP efetivamente conectou — registra no
-    // backend-husk ("McpConnection") para os objetivos primários do dashboard.
+    // API do CDF Finance ("McpConnection") para os objetivos primários do dashboard.
     // Falha aqui não derruba a troca do code; o next connect re-registra.
     try {
       const client = await store.getClient(row.clientId);

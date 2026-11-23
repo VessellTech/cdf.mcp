@@ -51,5 +51,5 @@ app.all("/", requireBearerAuth, mcpEndpoint);
 
 app.listen(env.PORT, () => {
   console.log(`cdf-mcp-server ouvindo em :${env.PORT} (público: ${env.PUBLIC_URL})`);
-  console.log(`backend-husk: ${env.BACKEND_API_URL}`);
+  console.log(`API: ${env.BACKEND_API_URL}`);
 });

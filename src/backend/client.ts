@@ -1,17 +1,14 @@
 import { env } from "../config.js";
 
 /**
- * Único ponto de contato com o backend-husk. Fala apenas HTTP público — o
- * mesmo contrato usado pelo app mobile (POST /api/mobile/auth/login,
- * refresh, e as rotas [autenticado] com Bearer <mobile JWT>). Isso é o que
- * garante isolamento: o mcp-server nunca importa código/schema do
- * backend-husk, então não há dependência circular possível entre os dois
- * serviços.
+ * Único ponto de contato com a API do CDF Finance. Fala apenas HTTP público — o
+ * mesmo contrato usado pelo app mobile (login, refresh, e as rotas autenticadas
+ * com Bearer). Por isso o servidor MCP nunca importa código ou schema da API.
  */
 
 export class BackendApiError extends Error {
   constructor(public status: number, public body: unknown) {
-    super(`backend-husk respondeu ${status}`);
+    super(`API do CDF Finance respondeu ${status}`);
   }
 }
 
@@ -94,7 +91,7 @@ export async function call<T>(
 }
 
 /**
- * Registra a conexão de um cliente MCP (Claude, ChatGPT, ...) no backend-husk
+ * Registra a conexão de um cliente MCP (Claude, ChatGPT, ...) na API
  * — tabela "McpConnection", upsert por (userId, clientId). Chamado no token
  * exchange do OAuth; best-effort (falha não derruba a troca do code).
  */
