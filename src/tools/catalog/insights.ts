@@ -53,7 +53,11 @@ export const insightTools: ToolDef[] = [
       cacheHit: z.boolean().optional(),
       months: z
         .array(
-          z.object({
+          z
+            .object({
+            id: z.string().optional(),
+            equityTotal: z.number().optional().nullable(),
+            debtTotal: z.number().optional().nullable(),
             month: z.number().optional(),
             year: z.number().optional(),
             label: z.string().optional(),
@@ -78,7 +82,10 @@ export const insightTools: ToolDef[] = [
             categories: z.array(cashflowCategorySchema).optional(),
             topExpenses: z.array(cashflowCategorySchema).optional(),
             costCenters: z.array(z.object({ name: z.string().optional(), total: z.number().optional() })).optional(),
-          }),
+            })
+            // Passthrough: o caminho ao vivo devolve o que o motor Python calcula,
+            // e um campo novo lá não deve derrubar a validação do cliente.
+            .passthrough(),
         )
         .optional(),
       currentMonthForecast: z.unknown().optional().nullable(),
@@ -225,6 +232,8 @@ export const insightTools: ToolDef[] = [
     outputSchema: z.object({
       month: z.number().optional(),
       year: z.number().optional(),
+      // Vem do caminho materializado do backend (sinal interno de cache, não é dado de negócio).
+      found: z.boolean().optional(),
       insights: z
         .array(
           z.object({

@@ -14,6 +14,7 @@ const cardShape = {
   currency: z.string().optional(),
   limitUsed: z.number().optional(),
   currentInvoice: z.number().optional().describe("Total da fatura atual (não paga)"),
+  paidAmount: z.number().optional().describe("Quanto já foi pago nas faturas em aberto (antecipações)"),
   lastFourDigits: z.string().optional().nullable(),
   brand: z.string().optional().nullable(),
   createdAt: z.string().optional(),
