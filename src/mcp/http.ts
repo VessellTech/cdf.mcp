@@ -10,10 +10,13 @@ import { getValidAccessToken } from "../backend/session.js";
  * (Railway pode rotear requisições da mesma conexão lógica para instâncias
  * diferentes) — a única coisa que precisa persistir entre chamadas é a
  * sessão OAuth (já é feito no Postgres, ver src/backend/session.ts).
+ *
+ * Requisições anônimas (`mcpAnonymous`) só chegam aqui com métodos públicos
+ * (ver src/mcp/public.ts), então o resolvedor de token nunca é usado nelas.
  */
 export async function handleMcpRequest(req: Request, res: Response) {
   const sessionId = req.mcpSessionId;
-  if (!sessionId) {
+  if (!sessionId && !req.mcpAnonymous) {
     res.status(401).json({ error: "unauthorized" });
     return;
   }
@@ -22,9 +25,13 @@ export async function handleMcpRequest(req: Request, res: Response) {
   // Modo serviço-a-serviço: usa o JWT mobile recebido direto (sem sessão OAuth).
   registerTools(
     server,
-    req.mcpUserToken
-      ? async () => req.mcpUserToken as string
-      : async () => getValidAccessToken(sessionId),
+    req.mcpAnonymous
+      ? async () => {
+          throw new Error("Faça login no CDF Finance para usar esta ferramenta.");
+        }
+      : req.mcpUserToken
+        ? async () => req.mcpUserToken as string
+        : async () => getValidAccessToken(sessionId as string),
   );
 
   const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });

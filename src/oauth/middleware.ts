@@ -1,17 +1,24 @@
 import type { NextFunction, Request, Response } from "express";
 import { env } from "../config.js";
 import * as store from "./store.js";
+import { isPublicMcpPayload } from "../mcp/public.js";
 
 declare module "express-serve-static-core" {
   interface Request {
     mcpSessionId?: string;
     /** Só no modo serviço-a-serviço: JWT mobile do usuário (backend-husk → MCP). */
     mcpUserToken?: string;
+    /** Requisição sem token com apenas métodos públicos (initialize, tools/list…). */
+    mcpAnonymous?: boolean;
   }
 }
 
 /**
- * Protege /mcp: exige Bearer <access_token do MCP> emitido por /token.
+ * Protege /mcp: exige Bearer <access_token do MCP> emitido por /token, exceto
+ * para métodos públicos (initialize, tools/list, ping) enviados sem nenhum
+ * header Authorization — assim clientes e agentes conseguem descobrir o
+ * catálogo antes de logar. Um Bearer presente é sempre validado, mesmo nesses
+ * métodos. `tools/call` e demais métodos continuam exigindo token.
  *
  * Modo serviço-a-serviço (backend-husk → MCP): quando `MCP_SERVICE_TOKEN` está
  * configurado e o Bearer é exatamente esse token, a sessão é resolvida para o
@@ -20,8 +27,14 @@ declare module "express-serve-static-core" {
  * executor de tools usa o token fornecido direto, em vez de resolver a sessão.
  */
 export async function requireBearerAuth(req: Request, res: Response, next: NextFunction) {
-  const header = req.header("authorization") ?? "";
-  const [scheme, token] = header.split(" ");
+  const header = req.header("authorization");
+  if (header === undefined && req.method === "POST" && isPublicMcpPayload(req.body)) {
+    req.mcpAnonymous = true;
+    next();
+    return;
+  }
+
+  const [scheme, token] = (header ?? "").split(" ");
   if (scheme !== "Bearer" || !token) {
     res
       .status(401)

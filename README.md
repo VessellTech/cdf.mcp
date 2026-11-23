@@ -61,6 +61,8 @@ Claude / ChatGPT (MCP client)
 4. Cada tool renova o `access_token` via `refresh` automaticamente (`getValidAccessToken`).
 5. Sessão aparece como device em `GET /api/mobile/devices` — revogável em `DELETE /api/mobile/devices/:id`.
 
+**Descoberta sem login:** `initialize`, `ping` e `tools/list` respondem sem token (requisição sem header `Authorization`, só com esses métodos). Assim um cliente ou agente vê o catálogo antes de cadastrar. `tools/call` e os demais métodos exigem Bearer; sem ele, a resposta é `401` com `WWW-Authenticate`, o que dispara o fluxo OAuth. Um Bearer enviado é sempre validado.
+
 Por que isolado (`README` original): sem dependência circular, deploy/escala independentes (Railway vs Coolify no backend) e imune a troca de linguagem do backend — só fala HTTP.
 
 ## Tools
@@ -132,6 +134,7 @@ Ver [`.env.example`](./.env.example) comentado.
 ## Segurança
 
 - **PKCE S256 obrigatório** em todo `authorization_code`.
+- **Métodos públicos sem token** — só `initialize`, `ping`, `notifications/initialized` e `tools/list` (`src/mcp/public.ts`). Nenhum acessa dados do usuário.
 - **Tokens opacos** — só `SHA-256` persiste (`oauth_tokens`), bruto é entregue uma vez.
 - **JWT mobile criptografado** `AES-256-GCM` em `sessions` — nunca exposto ao client (`src/crypto.ts`, `src/mcp/http.ts`).
 - **Device isolado** — cada sessão `mcp-<id>` (`src/backend/client.ts:45`) revogável sem afetar outros logins.
