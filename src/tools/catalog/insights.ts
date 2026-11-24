@@ -113,7 +113,7 @@ export const insightTools: ToolDef[] = [
     name: "spending_projection",
     title: "Projeção de gastos",
     description:
-      "Projeção mensal (até 12 meses) da despesa efetiva total e das categorias de maior peso, sem detalhar receita/saldo/patrimônio. É um recorte de cashflow_forecast focado só em despesa — use cashflow_forecast quando precisar também de saldo/entradas, e use este quando o interesse é só 'quanto vou gastar e em quê'.",
+      "Use para 'quanto vou gastar nos próximos meses e em quê?'. Projeção mensal (até 12 meses) da despesa efetiva total e das categorias de maior peso, sem detalhar receita/saldo/patrimônio. É um recorte de cashflow_forecast focado só em despesa — use cashflow_forecast quando precisar também de saldo/entradas, e use este quando o interesse é só 'quanto vou gastar e em quê'.",
     method: "GET",
     path: "/api/analytics/spending-projection",
     input: {
@@ -155,7 +155,7 @@ export const insightTools: ToolDef[] = [
     name: "networth_projection",
     title: "Projeção de patrimônio líquido",
     description:
-      "Projeção mensal (até 12 meses) do patrimônio líquido (caixa projetado + total de equities), sem detalhar categorias de gasto/receita. Recorte de cashflow_forecast focado só em patrimônio — use este quando o interesse é só a curva de patrimônio, e wealth_evolution quando precisar separar quanto do crescimento veio de aporte vs valorização dos ativos (esse é histórico, não projeção).",
+      "Use para 'como meu patrimônio deve evoluir nos próximos meses?'. Projeção mensal (até 12 meses) do patrimônio líquido (caixa projetado + total de equities), sem detalhar categorias de gasto/receita. Recorte de cashflow_forecast focado só em patrimônio — use este quando o interesse é só a curva de patrimônio, e wealth_evolution quando precisar separar quanto do crescimento veio de aporte vs valorização dos ativos (esse é histórico, não projeção).",
     method: "GET",
     path: "/api/analytics/networth-projection",
     input: {
@@ -185,7 +185,7 @@ export const insightTools: ToolDef[] = [
     name: "current_month_spending",
     title: "Gastos do mês atual",
     description:
-      "Só o mês corrente (não série futura): gasto já realizado, ritmo diário, total projetado até o fim do mês e confiança da projeção, comparado a orçamento se houver. Diferente de cashflow_forecast/spending_projection (que olham vários meses à frente) e de categories_insights (que compara mês atual vs anterior por categoria, sem ritmo/projeção de fechamento).",
+      "Use para 'quanto gastei este mês?' e 'vou fechar o mês no vermelho?'. Para um panorama geral de saúde financeira, use financial_snapshot. Só o mês corrente (não série futura): gasto já realizado, ritmo diário, total projetado até o fim do mês e confiança da projeção, comparado a orçamento se houver. Diferente de cashflow_forecast/spending_projection (que olham vários meses à frente) e de categories_insights (que compara mês atual vs anterior por categoria, sem ritmo/projeção de fechamento).",
     method: "GET",
     path: "/api/analytics/current-month-spending",
     input: {
@@ -221,7 +221,7 @@ export const insightTools: ToolDef[] = [
     name: "categories_insights",
     title: "Insights por categoria",
     description:
-      "Gasto acumulado por categoria (somando subcategorias) no mês alvo vs mês anterior, com % de variação e comparação com orçamento (se houver Budget mensal para a categoria). Sem month/year usa o mês atual e serve a versão materializada (mais rápida); com month/year calcula ao vivo. Para série de vários meses use category_history; para insights por tag (não categoria) use tags_insights; para um resumo de correlações do momento (poupança, dívida, reserva) use financial_snapshot.",
+      "Use para 'onde meu dinheiro foi este mês, por categoria, e o que mudou em relação ao mês passado?'. Gasto acumulado por categoria (somando subcategorias) no mês alvo vs mês anterior, com % de variação e comparação com orçamento (se houver Budget mensal para a categoria). Sem month/year usa o mês atual e serve a versão materializada (mais rápida); com month/year calcula ao vivo. Para série de vários meses use category_history; para insights por tag (não categoria) use tags_insights; para um resumo de correlações do momento (poupança, dívida, reserva) use financial_snapshot.",
     method: "GET",
     path: "/api/categories/insights",
     input: {
@@ -272,7 +272,7 @@ export const insightTools: ToolDef[] = [
     name: "insights_highlight",
     title: "Destaque financeiro do mês",
     description:
-      "Devolve NO MÁXIMO um destaque textual (highlight pode vir null), escolhido por prioridade fixa: (1) contas atrasadas não pagas, senão (2) orçamento mensal mais estourado (>100% do limite), senão (3) categoria com maior alta de gasto vs mês anterior (gasto atual ≥ R$50 e variação > 15%). Pensado pra UI de 'destaque do dia', não para análise completa — para todos os alertas de comportamento use behavior_insights, e para anomalias específicas (contas, assinaturas, transporte, concentração de vencimentos, cartão) use as tools bill_anomalies/subscriptions_overview/transport_routine/bill_concentration/best_card_day.",
+      "Use para 'o que mais precisa da minha atenção agora?' (uma frase só). Para uma visão geral de saúde financeira, use financial_snapshot. Devolve NO MÁXIMO um destaque textual (highlight pode vir null), escolhido por prioridade fixa: (1) contas atrasadas não pagas, senão (2) orçamento mensal mais estourado (>100% do limite), senão (3) categoria com maior alta de gasto vs mês anterior (gasto atual ≥ R$50 e variação > 15%). Pensado pra UI de 'destaque do dia', não para análise completa — para todos os alertas de comportamento use behavior_insights, e para anomalias específicas (contas, assinaturas, transporte, concentração de vencimentos, cartão) use as tools bill_anomalies/subscriptions_overview/transport_routine/bill_concentration/best_card_day.",
     method: "GET",
     path: "/api/insights/highlight",
     input: {},
@@ -294,7 +294,7 @@ export const insightTools: ToolDef[] = [
     name: "behavior_insights",
     title: "Insights de comportamento",
     description:
-      "Observações financeiras já analisadas e prontas para narrar (cada item já vem com um texto pronto em `text`): padrão de dia da semana por categoria, aumento de gasto nos dias após o recebimento de renda, e categorias que sobem nos fins de semana. Pode retornar lista vazia se nenhum padrão for detectado. Distinto de insights_highlight (só 1 destaque, prioriza atraso/orçamento) e das tools de anomalia específica (bill_anomalies, transport_routine, bill_concentration, best_card_day, subscriptions_overview), que olham sinais isolados diferentes.",
+      "Use para 'tenho algum padrão nos meus gastos?' (dia da semana, efeito do recebimento de renda, fins de semana). Observações financeiras já analisadas e prontas para narrar (cada item já vem com um texto pronto em `text`): padrão de dia da semana por categoria, aumento de gasto nos dias após o recebimento de renda, e categorias que sobem nos fins de semana. Pode retornar lista vazia se nenhum padrão for detectado. Distinto de insights_highlight (só 1 destaque, prioriza atraso/orçamento) e das tools de anomalia específica (bill_anomalies, transport_routine, bill_concentration, best_card_day, subscriptions_overview), que olham sinais isolados diferentes.",
     method: "GET",
     path: "/api/insights/behavior",
     input: {},
@@ -361,7 +361,7 @@ export const insightTools: ToolDef[] = [
     name: "financial_snapshot",
     title: "Resumo financeiro correlacionado",
     description:
-      "Retrato único do momento atual (não série): saldo total, receita/despesa média mensal, taxa de poupança, reserva de emergência (meses), endividamento sobre a renda anual e patrimônio. Vem de uma tabela materializada (FinancialSnapshot) recalculada de forma best-effort a cada escrita relevante; se ainda não existir para o usuário, é calculada na hora. Diferença de analytics_history: aqui é 1 número por métrica (o estado agora), lá é série mensal com estatística/tendência.",
+      "Use como PONTO DE PARTIDA para perguntas gerais sobre a saúde financeira ('como estou?', 'como estão minhas finanças?', 'estou bem?') — é a resposta padrão quando a pergunta não especifica período ou categoria. Retrato único do momento atual (não série): saldo total, receita/despesa média mensal, taxa de poupança, reserva de emergência (meses), endividamento sobre a renda anual e patrimônio. Vem de uma tabela materializada (FinancialSnapshot) recalculada de forma best-effort a cada escrita relevante; se ainda não existir para o usuário, é calculada na hora. Diferença de analytics_history: aqui é 1 número por métrica (o estado agora), lá é série mensal com estatística/tendência.",
     method: "GET",
     path: "/api/insights/financial-snapshot",
     input: {},
