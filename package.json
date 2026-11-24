@@ -1,7 +1,7 @@
 {
   "name": "cdf-mcp-server",
   "private": false,
-  "version": "0.1.10",
+  "version": "0.1.11",
   "type": "module",
   "description": "MCP remoto do CDF Finance — conecta Claude/ChatGPT à conta financeira do usuário.",
   "license": "BUSL-1.1",
